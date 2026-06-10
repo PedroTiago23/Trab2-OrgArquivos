@@ -10,6 +10,8 @@ Pedro Tiago Biffi - 16827777
 
 #define TAM_CABECALHO 17
 #define TAM_REGISTRO 80
+#define TAM_CAB_ARVOREB 17
+#define TAM_NO_ARVOREB 53
 #define TAM_MAX_LINHA_CSV 128 
 #define CAMPO_NULO "NULO"
 #define LEN_CAMPO_NULO 5
@@ -41,6 +43,27 @@ typedef struct
     int tamNomeLinha;
     char* nomeLinha;
 } REGISTRO;
+
+
+// Cabeçalho do arquivo de índice (Árvore-B) - 17 bytes
+typedef struct {
+    char status;
+    int noRaiz;
+    int topo;
+    int proxRRN;
+    int nroNos;
+} CABECALHO_ARVOREB;
+
+// Nó (Página) da Árvore-B - 53 bytes
+typedef struct {
+    char removido;
+    int proximo;
+    int tipoNo;
+    int nroChaves;
+    int C[3];       // Chaves de busca 
+    int PR[3];      // Ponteiros de Referência 
+    int P[4];       // Ponteiros para subárvores 
+} NO_ARVOREB;
 
 // Tipo enum para ajudar a definir qual campo foi lido como critério de busca
 // em SELECT_WHERE(), para então armazenar o valor de tal campo corretamente
