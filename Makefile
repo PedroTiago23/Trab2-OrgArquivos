@@ -1,4 +1,5 @@
 all:
-	gcc Main.c -o main
+	gcc -o ExecutavelPimpao *.c
+
 run:
-	./main
+	./ExecutavelPimpao

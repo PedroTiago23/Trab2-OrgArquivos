@@ -6,6 +6,13 @@ Pedro Tiago Biffi - 16827777
 
 // Trecho principal da funcionalidade Select Where, onde apenas registros
 // com campos de valores específicados são impressos
+
+#include "SelectWhere.h"
+#include <stdlib.h>
+#include "ArquivoIO.h"
+#include "LogicaBusca.h"
+#include "fornecidas.h"
+
 void SELECT_WHERE(){
     
     char arqBIN_nome[32];

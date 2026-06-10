@@ -8,6 +8,12 @@ Pedro Tiago Biffi - 16827777
 // tenham campos de valor especifiacdo são removidos com a abordagem
 // dinâmica de reaproveitamento de espaço
 
+#include "Delete.h"
+#include <stdlib.h>
+#include "ArquivoIO.h"
+#include "LogicaBusca.h"
+#include "fornecidas.h"
+
 void DELETE(){
     
     char arqBIN_nome[32];

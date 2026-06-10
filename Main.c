@@ -5,20 +5,20 @@ Pedro Tiago Biffi - 16827777
 */
 
 #include <stdio.h>
-#include "fornecidas.c"
+#include "fornecidas.h"
 
 // Arquivos contendo todo conteúdo auxiliar para as funcionalidades
-#include "Estruturas.c" 
-#include "ArquivoIO.c"
-#include "LogicaBusca.c"
+#include "Estruturas.h" 
+#include "ArquivoIO.h"
+#include "LogicaBusca.h"
 
 // Arquivos de cada uma das 6 funcionalidades
-#include "CreateTable.c"
-#include "SelectFrom.c"
-#include "SelectWhere.c"
-#include "Delete.c"
-#include "Insert.c"
-#include "Update.c"
+#include "CreateTable.h"
+#include "SelectFrom.h"
+#include "SelectWhere.h"
+#include "Delete.h"
+#include "Insert.h"
+#include "Update.h"
 
 int main(){
     // Lendo entrada de qual será a funcionalidade executada

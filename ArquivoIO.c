@@ -4,10 +4,7 @@ Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "Estruturas.c"
+#include "ArquivoIO.h"
 
 void imprimeCampoInt(int campo) {
     if(campo != -1)

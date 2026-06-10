@@ -4,11 +4,10 @@ Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include "Estruturas.c"
+#include "Update.h"
+#include "ArquivoIO.h"
+#include "LogicaBusca.h"
+#include "fornecidas.h"
 
 // Parte principal da funcionalidade de Update, que atualiza campos
 // específicos de registros conforme o que foi pedido na busca.

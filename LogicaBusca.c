@@ -4,11 +4,9 @@ Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include "Estruturas.c"
+#include "LogicaBusca.h"
+#include "ArquivoIO.h"
+#include "fornecidas.h"
 
 
 // Função usada para ler o nome de um campo na funcionalidade Select Where e definir

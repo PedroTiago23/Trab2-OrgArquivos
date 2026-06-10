@@ -4,10 +4,10 @@ Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */
 
-#include "Estruturas.c"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "CreateTable.h"
+#include "ArquivoIO.h"
+#include "LogicaBusca.h"
+#include "fornecidas.h"
 
 // Função usada para ler um único campo de inteiro no arquivo .csv
 void lerIntCSV(int* campoRegistro, char** separationPtr)

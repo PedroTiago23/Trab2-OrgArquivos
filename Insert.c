@@ -4,9 +4,10 @@ Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "Estruturas.c"
+#include "Insert.h"
+#include "ArquivoIO.h"
+#include "LogicaBusca.h"
+#include "fornecidas.h"
 
 // Função usada para ler todos os campos na ordem certa diretamente do terminal onde o 
 // código está sendo rodado
