@@ -35,19 +35,19 @@ void lerRegistroIndice(NO_ARVOREB* registroNo, int RRN, FILE* arqIndice)
     #define leCampoNo(item) \
         fread(&registroNo->item, sizeof(int), 1, arqIndice)
 
-    leCampo(proximo);
-    leCampo(tipoNo);
-    leCampo(nroChaves);
-    leCampo(C[1]);
-    leCampo(PR[1]);
-    leCampo(C[2]);
-    leCampo(PR[2]);
-    leCampo(C[3]);
-    leCampo(PR[3]);
-    leCampo(P[1]);
-    leCampo(P[2]);
-    leCampo(P[3]);
-    leCampo(P[4]);
+    leCampoNo(proximo);
+    leCampoNo(tipoNo);
+    leCampoNo(nroChaves);
+    leCampoNo(C[0]);
+    leCampoNo(PR[0]);
+    leCampoNo(C[1]);
+    leCampoNo(PR[1]);
+    leCampoNo(C[2]);
+    leCampoNo(PR[2]);
+    leCampoNo(P[0]);
+    leCampoNo(P[1]);
+    leCampoNo(P[2]);
+    leCampoNo(P[3]);
 
     #undef leCampoNo
 
@@ -57,9 +57,27 @@ void lerRegistroIndice(NO_ARVOREB* registroNo, int RRN, FILE* arqIndice)
 // Função principal de busca, que retorna o offset do registro
 // com a chave encontrada no arquivo de dados.
 // noRRN será usado para determinar a página onde inserir.
-int buscaChave(int chave, int noRRN, FILE* arqIndice)
+int buscaChave(int chave, int* noRRN, FILE* arqIndice)
 {
+    NO_ARVOREB registroNo;
+    lerRegistroIndice(&registroNo, *noRRN, arqIndice);
 
+    // Lógica para checar as 3 chaves e desviar para os descendentes. 
+    for(int i = 0; i < 3; i++)
+    {
+        if(registroNo.C[i] == -1)
+            break;
+
+        if(chave == registroNo.C[i])
+            return registroNo.PR[i];
+
+        if(chave < registroNo.C[i])
+        {
+            *noRRN = registroNo.P[i];
+            if(noRRN == -1) return -1;
+            return buscaChave(chave, noRRN, arqIndice);
+        }
+    }
 }
 
 // Trecho principal para a funcionalidade de criar um arquivo de índice para
