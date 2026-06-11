@@ -55,7 +55,7 @@ void CREATE_INDEX() {
             // Aqui fica a parte de inserir na árvore 
         }
 
-        liberaStringsRegistro(&reg); // Importante para não dar memory leak
+        liberaStringsRegistro(&reg); // Só para evitar memory leak
         rrnDados++;
     }
 
