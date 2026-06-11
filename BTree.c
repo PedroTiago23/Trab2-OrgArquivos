@@ -1,31 +1,82 @@
 // Funcionalidade 7 - Criação do Índice
 
 #include "BTree.h"
-#include "ArquivoIO.h"
-#include "fornecidas.h"
 
-// Inicializa o arquivo de índice zerado e com status inconsistente ('0')
-void criarIndiceVazio(FILE* arqIndice) {
-    CABECALHO_ARVOREB cabecalho;
-    cabecalho.status = '0';
-    cabecalho.noRaiz = -1;
-    cabecalho.topo = -1;
-    cabecalho.proxRRN = 0;
-    cabecalho.nroNos = 0;
-    
-    fseek(arqIndice, 0, SEEK_SET);
 
-    #define ESCREVE_CAB(item) \
-        fwrite(&cabecalho.item, sizeof(char), 1, arqIndice);
-    
-    ESCREVE_CAB(status);
-    ESCREVE_CAB(noRaiz);
-    ESCREVE_CAB(topo);
-    ESCREVE_CAB(proxRRN);
-    ESCREVE_CAB(nroNos);
+NO_ARVOREB criarNoVazio(int tipoNo){
+    NO_ARVOREB teste;
+    return teste;
 }
 
+void escreverNoArvoreB(FILE* arqIndice, NO_ARVOREB* no, int RRN){
+    return;
+}
+
+// Sobrescreve todos os dados do registro de cabeçalho do arquivo de índice.
+void atualizaCabecalhoIndice(CABECALHO_ARVOREB* cabecalho, FILE* arqIndice)
+{
+    fseek(arqIndice, 0, SEEK_SET);
+    fwrite(&cabecalho->status, sizeof(char), 1, arqIndice);
+    fwrite(&cabecalho->noRaiz, sizeof(int), 1, arqIndice);
+    fwrite(&cabecalho->topo, sizeof(int), 1, arqIndice);
+    fwrite(&cabecalho->proxRRN, sizeof(int), 1, arqIndice);
+    fwrite(&cabecalho->nroNos, sizeof(int), 1, arqIndice);
+    return;
+}
+
+// Recupera os dados do cabeçalho de um arquivo de índice e armazena em
+// uma struct de cabeçalho de índice.
+void lerCabecalhoIndice(CABECALHO_ARVOREB* cabecalho, FILE* arqIndice)
+{
+    fseek(arqIndice, 0, SEEK_SET);
+    fread(&cabecalho->status, sizeof(char), 1, arqIndice);
+    fread(&cabecalho->noRaiz, sizeof(int), 1, arqIndice);
+    fread(&cabecalho->topo, sizeof(int), 1, arqIndice);
+    fread(&cabecalho->proxRRN, sizeof(int), 1, arqIndice);
+    fread(&cabecalho->nroNos, sizeof(int), 1, arqIndice);
+    return;
+}
+
+void lerRegistroIndice(NO_ARVOREB* registroNo, int RRN, FILE* arqIndice)
+{
+    int paginaOffset = 17 + (RRN * 53);
+    fseek(arqIndice, paginaOffset, SEEK_SET);
+    fread(&registroNo->removido, sizeof(char), 1, arqIndice);
+    
+    #define LeCampoNo(item) \
+        fread(&registroNo->item, sizeof(int), 1, arqIndice)
+
+    LeCampoNo(proximo);
+    LeCampoNo(tipoNo);
+    LeCampoNo(nroChaves);
+    LeCampoNo(C[0]);
+    LeCampoNo(PR[0]);
+    LeCampoNo(C[1]);
+    LeCampoNo(PR[1]);
+    LeCampoNo(C[2]);
+    LeCampoNo(PR[2]);
+    LeCampoNo(P[0]);
+    LeCampoNo(P[1]);
+    LeCampoNo(P[2]);
+    LeCampoNo(P[3]);
+
+    #undef LeCampoNo
+
+    return;
+}
+
+// Função principal de busca, que retorna o offset do registro
+// com a chave encontrada no arquivo de dados.
+// noRRN será usado para determinar a página onde inserir.
+int buscaChave(int chave, int noRRN, FILE* arqIndice)
+{
+
+}
+
+// Trecho principal para a funcionalidade de criar um arquivo de índice para
+// o arquivo de dados do trabalho introdutório. 
 void CREATE_INDEX() {
+    // Leitura do arquivo de dados e criação/leitura do arquivo de índice.
     char arqDadosNome[32], arqIndiceNome[32];
     scanf("%s %s", arqDadosNome, arqIndiceNome);
 
@@ -33,36 +84,44 @@ void CREATE_INDEX() {
     FILE* arqIndice = fopen(arqIndiceNome, "wb+");
 
     if (arqDados == NULL || arqIndice == NULL) {
-        printf("Falha no processamento do Arquivo.\n");
+        printf("Falha no processamento do arquivo.\n");
         return;
     }
 
-    CABECALHO cabDados;
-    lerCabecalhoBin(arqDados, &cabDados);
+    CABECALHO cabecalhoDados;
+    lerCabecalhoBin(arqDados, &cabecalhoDados);
 
-    // Escreve o cabeçalho inicial vazio no byte 0 do índice
-    criarIndiceVazio(arqIndice);
+    // Inicializa o arquivo de índice zerado e com status inconsistente ('0').
+    CABECALHO_ARVOREB cabecalhoTree;
+    cabecalhoTree.status = '0';
+    cabecalhoTree.noRaiz = -1;
+    cabecalhoTree.topo = -1;
+    cabecalhoTree.proxRRN = 0;
+    cabecalhoTree.nroNos = 0;
+    
+    atualizaCabecalhoIndice(&cabecalhoTree, arqIndice);
 
     REGISTRO reg;
     int rrnDados = 0;
 
-    // percorre sequencialmente o arquivo de dados (estacoes.bin)
-    while (rrnDados < cabDados.proxRRN) {
+    // Percorre sequencialmente o arquivo de dados.
+    while (rrnDados < cabecalhoDados.proxRRN) {
         LerRegistroBin(arqDados, &reg, rrnDados);
 
-        // Apenas registros ativos são indexados
-        if (reg.removido == '0') {
-            // Aqui fica a parte de inserir na árvore 
+        // Apenas registros ativos são indexados.
+        if (reg.removido == '0')
+        {
+            
         }
 
-        liberaStringsRegistro(&reg); // Importante para evitar memory leak
+        liberaStringsRegistro(&reg); // Importante para não dar memory leak.
         rrnDados++;
     }
 
-    // Marca o índice como consistente e fecha tudo
-    fseek(arqIndice, 0, SEEK_SET);
-    char statusOk = '1';
-    fwrite(&statusOk, sizeof(char), 1, arqIndice);
+    // Atualiza os dados no cabeçalho do arquivo de índice.
+    cabecalhoTree.status = "1";
+    atualizaCabecalhoIndice(&cabecalhoTree, arqIndice);
+
 
     fclose(arqDados);
     fclose(arqIndice);
