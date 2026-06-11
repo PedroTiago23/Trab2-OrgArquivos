@@ -30,6 +30,8 @@ void lerCabecalhoIndice(CABECALHO_ARVOREB* cabecalho, FILE* arqIndice)
 void lerRegistroIndice(NO_ARVOREB* registroNo, int RRN, FILE* arqIndice)
 {
     int paginaOffset = 17 + (RRN * 53);
+    fseek(arqIndice, paginaOffset, SEEK_SET);
+
     fread(&registroNo->removido, sizeof(char), 1, arqIndice);
     
     #define leCampoNo(item) \
@@ -59,26 +61,27 @@ void lerRegistroIndice(NO_ARVOREB* registroNo, int RRN, FILE* arqIndice)
 // noRRN será usado para determinar a página onde inserir.
 int buscaChave(int chave, int* noRRN, FILE* arqIndice)
 {
+    if (*noRRN == -1) 
+        return -1;
+
     NO_ARVOREB registroNo;
     lerRegistroIndice(&registroNo, *noRRN, arqIndice);
 
-    // Lógica para checar as 3 chaves e desviar para os descendentes. 
-    for(int i = 0; i < 3; i++)
-    {
-        if(registroNo.C[i] == -1)
-            break;
+    int i = 0;
+    while (i < 3 && registroNo.C[i] != -1 && chave > registroNo.C[i]) 
+        i++;
 
-        if(chave == registroNo.C[i])
-            return registroNo.PR[i];
+    if (i < 3 && registroNo.C[i] == chave)
+        return registroNo.PR[i];
 
-        if(chave < registroNo.C[i])
-        {
-            *noRRN = registroNo.P[i];
-            if(noRRN == -1) return -1;
-            return buscaChave(chave, noRRN, arqIndice);
-        }
-    }
+    if(registroNo.P[i] == -1)
+        return -1;
+
+    *noRRN = registroNo.P[i]; 
+    return buscaChave(chave, noRRN, arqIndice);
 }
+
+
 
 // Trecho principal para a funcionalidade de criar um arquivo de índice para
 // o arquivo de dados do trabalho introdutório. 
@@ -126,7 +129,7 @@ void CREATE_INDEX() {
     }
 
     // Atualiza os dados no cabeçalho do arquivo de índice.
-    char statusOk = '1';
+    cabecalhoTree.status = "1";
     atualizaCabecalhoIndice(&cabecalhoTree, arqIndice);
 
     fclose(arqDados);
