@@ -15,7 +15,7 @@ void CREATE_INDEX()
     FILE* arqIndice = fopen(arqIndiceNome, "wb+");
 
     if (arqDados == NULL || arqIndice == NULL) {
-        printf("Falha no processamento do Arquivo.\n");
+        printf("Falha no processamento do arquivo.\n");
         return;
     }
 

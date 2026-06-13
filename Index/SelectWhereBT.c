@@ -11,11 +11,11 @@ void SELECT_TREE()
     FILE* arqIndice = fopen(arqIndiceNome, "rb");
 
     if (arqDados == NULL || arqIndice == NULL) {
-        printf("Falha no processamento do Arquivo.\n");
+        printf("Falha no processamento do arquivo.\n");
         return;
     }
 
-    int qtdBuscas;  
+    int qtdBuscas;
     scanf("%d", &qtdBuscas);
 
     CABECALHO cabecalho;
@@ -50,11 +50,20 @@ void SELECT_TREE()
             // Se o Offset = 17 + (RRN * 80), então o RRN = (Offset - 17)/80
             int offsetReg = buscaChave(regBusca.codEstacao, cabecalhoIndice.noRaiz, arqIndice);
 
-            if(offsetReg == -1)
-                printf("Registro inexistente.\n");
-            else LerRegistroBin(arqDados, &regLido, (offsetReg - 17)/80);
-            
+            if(offsetReg != -1)
+            {
+                LerRegistroBin(arqDados, &regLido, (offsetReg - 17)/80);
+
+                if(ComparaRegistros(&regBusca, &regLido) && regLido.removido == '0')
+                {
+                    imprimirRegistro(&regLido);
+                    existe_um = true;
+                }
+                if(regLido.nomeEstacao) free(regLido.nomeEstacao);
+                if(regLido.nomeLinha) free(regLido.nomeLinha);
+            }
         }
+
         else while(RRN < cabecalho.proxRRN)
         {
             BuscaRegistro(arqDados, &cabecalho, &regBusca, &regLido, &RRN);   
