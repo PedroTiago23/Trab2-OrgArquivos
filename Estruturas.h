@@ -12,6 +12,7 @@ Pedro Tiago Biffi - 16827777
 #define TAM_REGISTRO 80
 #define TAM_CAB_ARVOREB 17
 #define TAM_NO_ARVOREB 53
+#define ORDEM_ARVORE 4
 #define TAM_MAX_LINHA_CSV 128 
 #define CAMPO_NULO "NULO"
 #define LEN_CAMPO_NULO 5
