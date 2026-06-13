@@ -85,7 +85,7 @@ int buscaChave(int chave, int* noRRN, FILE* arqIndice)
         if(chave < registroNo.C[i])
         {
             *noRRN = registroNo.P[i];
-            if(noRRN == -1) return -1;
+            if(*noRRN == -1) return -1;
             return buscaChave(chave, noRRN, arqIndice);
         }
     }
@@ -137,7 +137,7 @@ void CREATE_INDEX() {
     }
 
     // Atualiza os dados no cabeçalho do arquivo de índice.
-    cabecalhoTree.status = "1";
+    cabecalhoTree.status = '1';
     atualizaCabecalhoIndice(&cabecalhoTree, arqIndice);
 
 
@@ -145,4 +145,14 @@ void CREATE_INDEX() {
     fclose(arqIndice);
 
     BinarioNaTela(arqIndiceNome);
+}
+
+// Verifica se a árvore está vazia analisando o valor do noRaiz(se for -1 está vazia)
+// Retorna 1 se for verdade ou 0 se for fake news
+int BtreeVazia(CABECALHO_ARVOREB* cabecalhoArvore){
+    return cabecalhoArvore->noRaiz == -1;
+}
+
+int inserirArvoreB(FILE* arqArvore, int valor){
+    
 }
