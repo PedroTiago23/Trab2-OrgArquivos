@@ -1,5 +1,27 @@
 #include "BTree.h"
 
+
+// Cria um nó vazio 
+// tipoNo: -1 (Folha), 0 (Raiz) ou 1 (Intermediário)
+NO_ARVOREB criarNoVazio(int tipoNo) {
+    NO_ARVOREB no;
+    no.removido = '0';
+    no.proximo = -1;
+    no.tipoNo = tipoNo;
+    no.nroChaves = 0;
+
+    // No pdf a Cristina diz que chaves e ponteiros não inicializados precisam
+    // ser inicializados com o valor -1
+    for (int i = 0; i < 3; i++) {
+        no.C[i] = -1;
+        no.PR[i] = -1;
+        no.P[i] = -1;
+    }
+    no.P[3] = -1; // O quarto ponteiro de subárvore
+
+    return no;
+}
+
 // Sobrescreve todos os dados do registro de cabeçalho do arquivo de índice.
 void atualizaCabecalhoIndice(CABECALHO_ARVOREB* cabecalho, FILE* arqIndice)
 {
@@ -81,3 +103,4 @@ int buscaChave(int chave, int noRRN, FILE* arqIndice)
     noRRN = registroNo.P[i]; 
     return buscaChave(chave, noRRN, arqIndice);
 }
+

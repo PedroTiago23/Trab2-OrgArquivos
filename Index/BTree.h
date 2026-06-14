@@ -8,6 +8,8 @@
 #include "../LogicaBusca.h"
 #include "../fornecidas.h"
 
+NO_ARVOREB criarNoVazio(int tipoNo);
+
 void atualizaCabecalhoIndice(CABECALHO_ARVOREB* cabecalho, FILE* arqIndice);
 
 void lerCabecalhoIndice(FILE* arqIndice, CABECALHO_ARVOREB* cabecalho);
@@ -15,5 +17,7 @@ void lerCabecalhoIndice(FILE* arqIndice, CABECALHO_ARVOREB* cabecalho);
 void lerRegistroIndice(NO_ARVOREB* registroNo, int RRN, FILE* arqIndice);
 
 int buscaChave(int chave, int noRRN, FILE* arqIndice);
+
+
 
 #endif

@@ -42,10 +42,10 @@ void CREATE_INDEX()
         // Apenas registros ativos são indexados.
         if (reg.removido == '0')
         {
-            // Inserção aqui.
+            inserirNaArvoreB(arqIndice, &cabecalhoTree, reg.codEstacao, rrnDados);
         }
 
-        liberaStringsRegistro(&reg); // Importante para não dar memory leak.
+        liberaStringsRegistro(&reg); // Para não dar memory leak.
         rrnDados++;
     }
 
