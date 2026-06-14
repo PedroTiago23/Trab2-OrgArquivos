@@ -1,7 +1,7 @@
 // Depois mudar para selectwherebt.h
 #include "BTree.h"
 
-void SELECT_TREE()
+void SELECT_INDEX()
 {
     // Leitura do arquivo de dados e do arquivo de índice.
     char arqDadosNome[32], arqIndiceNome[32];
@@ -52,7 +52,8 @@ void SELECT_TREE()
 
             if(offsetReg != -1)
             {
-                LerRegistroBin(arqDados, &regLido, (offsetReg - 17)/80);
+                RRN = (offsetReg - 17)/80;
+                LerRegistroBin(arqDados, &regLido, RRN);
 
                 if(ComparaRegistros(&regBusca, &regLido) && regLido.removido == '0')
                 {

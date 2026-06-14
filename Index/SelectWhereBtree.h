@@ -3,6 +3,6 @@
 
 #include "BTree.h"
 
-void SELECT_TREE();
+void SELECT_INDEX();
 
 #endif

@@ -47,6 +47,7 @@ void lerCabecalhoIndice(FILE* arqIndice, CABECALHO_ARVOREB* cabecalho)
     return;
 }
 
+// Recupera os dados de uma página do índice e armazena em uma struct de página. 
 void lerRegistroIndice(NO_ARVOREB* registroNo, int RRN, FILE* arqIndice)
 {
     int paginaOffset = 17 + (RRN * 53);
