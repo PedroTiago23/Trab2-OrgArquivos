@@ -1,88 +1,126 @@
 #include "DeleteBtree.h"
 
 
-// Usada para avaliar se uma página está abaixo do mínimo de chaves ()
-int contarChaves()
+// Usada para avaliar se uma página está abaixo do mínimo de chaves 
+int contarChaves(NO_ARVOREB* pagina) 
 {
+    int quantidade = 0;
 
+    // Percorre o vetor de chaves até o limite 
+    for (int i = 0; i < ORDEM_ARVORE - 1; i++) 
+    {
+        // Se a chave for diferente de -1 (vazio ou removido), soma o contador
+        if (pagina->C[i] != -1) 
+        {
+            quantidade++;
+        }
+    }
+
+    return quantidade;
 }
 
 // Remove os espaços vazios entre as chaves.
-void reorganizarPagina(NO_ARVOREB* pagina)
-{
-
+void reorganizarPagina(NO_ARVOREB* pagina, int posicaoRemovida) {
+    for (int j = posicaoRemovida; j < pagina->nroChaves - 1; j++) {
+        pagina->C[j] = pagina->C[j+1];
+        pagina->PR[j] = pagina->PR[j+1];
+        pagina->P[j+1] = pagina->P[j+2]; 
+    }
+    
+    // Tira a última posição que ficou duplicada
+    int ultimaPos = pagina->nroChaves - 1;
+    pagina->C[ultimaPos] = -1;
+    pagina->PR[ultimaPos] = -1;
+    if (pagina->tipoNo != -1) {
+        pagina->P[ultimaPos + 1] = -1;
+    }
+    
+    pagina->nroChaves--;
 }
 
 // Recursão para descermos na árvore em busca da chave a ser removida, seja em nó folha ou intermediário.
 // Retorna 1 apenas se a página atual estiver com underflow, senão retorna 0. 
-int removerRecursivo(int chave, int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* cabecalhoIndice)
-{
-    if(noRRN == -1)
-        return 0;
+int removerRecursivo(int chave, int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* cabecalhoIndice) {
+    if (noRRN == -1) return 0; // Chave não encontrada na árvore
 
     NO_ARVOREB paginaAtual;
     lerRegistroIndice(&paginaAtual, noRRN, arqIndice);
 
     int i = 0;
-    while (i < ORDEM_ARVORE-1 && paginaAtual.C[i] != -1 && chave > paginaAtual.C[i]) 
+    while (i < paginaAtual.nroChaves && chave > paginaAtual.C[i]) {
         i++;
+    }
     
-    if (i < ORDEM_ARVORE-1 && paginaAtual.C[i] == chave)
-    {
-        // Caso a chave for de um nó folha, podemos remover normal.
-        if(paginaAtual.tipoNo == -1)
-        {
-            paginaAtual.C[i] = -1;
-            paginaAtual.PR[i] = -1;
-
-            reorganizarPagina(&paginaAtual);
+    // Achou a chave na página atual
+    if (i < paginaAtual.nroChaves && paginaAtual.C[i] == chave) {
+        
+        if (paginaAtual.tipoNo == -1) {
+            // caso seja uma folha
+            reorganizarPagina(&paginaAtual, i);
+            escreverNoArvoreB(arqIndice, &paginaAtual, noRRN);
             
-        }
-        else    // Caso contrário, devemos trocar a chave com seu sucessor imediato.
-        {
-            // Busca do sucessor.
+            // Retorna 1 se a página ficou com 0 chaves (Underflow)
+            return (paginaAtual.nroChaves < 1) ? 1 : 0; 
+        } 
+        else {
+            // Caso seja um nó interno (Busca o sucessor)
             NO_ARVOREB paginaSucessor;
-            int sucessorRRN = paginaAtual.P[i+1];
+            int folhaSucessorRRN = paginaAtual.P[i+1];
             
-            while(sucessorRRN != -1)
-            {
-                lerRegistroIndice(&paginaSucessor, sucessorRRN, arqIndice);
-                if(paginaSucessor.P[0] == -1)   // Alcançamos a página folha com o sucessor (elmeento mais à esquerda).
-                break;
-                else 
-                sucessorRRN = paginaSucessor.P[0];
+            lerRegistroIndice(&paginaSucessor, folhaSucessorRRN, arqIndice);
+            while (paginaSucessor.P[0] != -1) {
+                folhaSucessorRRN = paginaSucessor.P[0];
+                lerRegistroIndice(&paginaSucessor, folhaSucessorRRN, arqIndice);
             }
             
             int chaveSucessor = paginaSucessor.C[0];
             int referenciaSucessor = paginaSucessor.PR[0];
 
+            // Substitui a chave atual pela sucessora e escreve no disco
             paginaAtual.C[i] = chaveSucessor;
             paginaAtual.PR[i] = referenciaSucessor;
-
-            removerRecursivo(chaveSucessor, paginaAtual.P[i+1], arqIndice, cabecalhoIndice);
+            escreverNoArvoreB(arqIndice, &paginaAtual, noRRN);
+            
+            // Desce recursivamente para apagar o sucessor lá na folha onde ele estava
+            int teveUnderflow = removerRecursivo(chaveSucessor, paginaAtual.P[i+1], arqIndice, cabecalhoIndice);
+            
+            
+            return 0; 
         }
     }
 
-    // Caso procuramos na página, não encontramos e não tem onde prosseguir.
-    if(paginaAtual.P[i] == -1)
-        return -1;  // Deletes não retornam se foi encontrado ou não mas veremos o que fazer com isto.
+    // Se a chave não está aqui, desce pelo ponteiro certo.
+    int filhoRRN = paginaAtual.P[i];
+    int teveUnderflow = removerRecursivo(chave, filhoRRN, arqIndice, cabecalhoIndice);
 
-    // Se tivermos páginas com chaves maiores que a procurada para continuarmos.
-    noRRN = paginaAtual.P[i]; 
-    removerRecursivo(chave, noRRN, arqIndice, cabecalhoIndice);
+    
+    return 0; 
 }
 
 // Função para iniciar todo o processo de remoção de uma chave da árvore-B.
-void removerChaveArvore(int chave, FILE* arqIndice, CABECALHO_ARVOREB* CabecalhoIndice)
-{
+void removerChaveArvore(int chave, FILE* arqIndice, CABECALHO_ARVOREB* cabecalhoIndice) {
+    if (cabecalhoIndice->noRaiz == -1) return;
 
-    return;
+    int status = removerRecursivo(chave, cabecalhoIndice->noRaiz, arqIndice, cabecalhoIndice);
+
+    // Se a raiz ficou vazia após a remoção e ela não é uma folha, a árvore diminui de altura
+    if (status == 1) {
+        NO_ARVOREB raizAtual;
+        lerRegistroIndice(&raizAtual, cabecalhoIndice->noRaiz, arqIndice);
+        
+        if (raizAtual.nroChaves == 0 && raizAtual.tipoNo != -1) {
+            // O novo RRN da raiz agpra é o único filho que sobrou
+            cabecalhoIndice->noRaiz = raizAtual.P[0]; 
+        } else if (raizAtual.nroChaves == 0 && raizAtual.tipoNo == -1) {
+            // A árvore está completamente vazia
+            cabecalhoIndice->noRaiz = -1;
+        }
+    }
 }
 
-void DELETE_INDEX()
-{
-    // Leitura do arquivo de dados e do arquivo de índice.
-    char arqDadosNome[32], arqIndiceNome[32];
+void DELETE_INDEX() {
+    char arqDadosNome[32]; 
+    char arqIndiceNome[32];
     scanf("%s %s", arqDadosNome, arqIndiceNome);
 
     FILE* arqDados = fopen(arqDadosNome, "rb+");
@@ -99,90 +137,68 @@ void DELETE_INDEX()
     CABECALHO cabecalho;
     lerCabecalhoBin(arqDados, &cabecalho);
     CABECALHO_ARVOREB cabecalhoIndice;
-    lerCabecalhoIndice(arqIndice, &cabecalhoIndice);
+    lerCabecalhoIndice(&cabecalhoIndice, arqIndice); 
 
-    // Marca os arquivos como incosistentes durante o processo.
     cabecalho.status = '0';
-    fseek(arqDados, 0, SEEK_SET);
-    fwrite(&cabecalho.status, sizeof(char), 1, arqDados);
-    fseek(arqDados, 0, SEEK_SET);
+    atualizaCabecalhoBin(&cabecalho, arqDados);
 
     cabecalhoIndice.status = '0';
-    fseek(arqIndice, 0, SEEK_SET);
-    fwrite(&cabecalhoIndice.status, sizeof(char), 1, arqIndice);
-    fseek(arqIndice, 0, SEEK_SET);
+    atualizaCabecalhoIndice(&cabecalhoIndice, arqIndice);
 
-    // Registro para cada registro lido do arquivo
     REGISTRO regLido;
-    // Registro usado para comparar cada registro lido com os campos da entrada.
     REGISTRO regBusca;
     
-    int contador = 0;
-    while (contador < qtdDeletes)
-    {
-        int RRN = 0;
-
+    for (int contador = 0; contador < qtdDeletes; contador++) {
         int qtdCampos = 0;
         scanf("%d", &qtdCampos);
-
-        // Settando o regBusca devidamente, colocando todos os 
-        // valores inválidos e então lendo os campos do terminal
         initRegBusca(&regBusca, qtdCampos);
 
-        // Caso o codEstacao é um dos campos buscados, usamos a busca pelo arquivo de índice.
-        if(regBusca.codEstacao != -2)
-        {
-            // Pulamos diretamente pro registro com o codEstacao buscado através da árvore que retorna seu offset.
-            // Se o Offset = 17 + (RRN * 80), então o RRN = (Offset - 17)/80
-            int offsetReg = buscaChave(regBusca.codEstacao, cabecalhoIndice.noRaiz, arqIndice);
+        if (regBusca.codEstacao != -2) {
+            int rrnEncontrado = buscaChave(regBusca.codEstacao, cabecalhoIndice.noRaiz, arqIndice);
 
-            if(offsetReg != -1)
-            {
-                RRN = (offsetReg - 17)/80;
-                LerRegistroBin(arqDados, &regLido, RRN);
+            if (rrnEncontrado != -1) {
+                LerRegistroBin(arqDados, &regLido, rrnEncontrado);
 
-                if(ComparaRegistros(&regBusca, &regLido) && regLido.removido == '0')
-                {
-                    removerRegistro(arqDados, RRN-1, cabecalho.topo);
-                    cabecalho.topo = RRN-1;
+                if (ComparaRegistros(&regBusca, &regLido) && regLido.removido == '0') {
+                    
+                    removerRegistro(arqDados, rrnEncontrado, cabecalho.topo);
+                    cabecalho.topo = rrnEncontrado;
 
-                    // Remoção da chave no arquivo de índice.
                     removerChaveArvore(regLido.codEstacao, arqIndice, &cabecalhoIndice);
                 }
                 if(regLido.nomeEstacao) free(regLido.nomeEstacao);
                 if(regLido.nomeLinha) free(regLido.nomeLinha);
             }
         }
-
-        else while(RRN < cabecalho.proxRRN)
-        {
-            BuscaRegistro(arqDados, &cabecalho, &regBusca, &regLido, &RRN);   
-            
-            // Verificação necessária pois é possível que BuscaRegistro já tenha passado de proxRRN
-            if(RRN < cabecalho.proxRRN)
-            {
-                removerRegistro(arqDados, RRN-1, cabecalho.topo);
-                cabecalho.topo = RRN-1;
+        else {
+            int RRN = 0;
+            while(RRN < cabecalho.proxRRN) {
+                BuscaRegistro(arqDados, &cabecalho, &regBusca, &regLido, &RRN);   
+                
+                if(RRN < cabecalho.proxRRN) {
+                    removerRegistro(arqDados, RRN, cabecalho.topo);
+                    cabecalho.topo = RRN;
+                    removerChaveArvore(regLido.codEstacao, arqIndice, &cabecalhoIndice);
+                }
+                
+                if(regLido.nomeEstacao) free(regLido.nomeEstacao);
+                if(regLido.nomeLinha) free(regLido.nomeLinha);
             }
-            
-            if(regLido.nomeEstacao) free(regLido.nomeEstacao);
-            if(regLido.nomeLinha) free(regLido.nomeLinha);
         }
 
         if(regBusca.nomeEstacao) free(regBusca.nomeEstacao);
         if(regBusca.nomeLinha) free(regBusca.nomeLinha);
-
-        contador++;
     }
 
     cabecalho.status = '1';
     recalcularContadores(arqDados, &cabecalho);
-    atualizarCabecalho(arqDados, &cabecalho);
+    atualizaCabecalhoBin(&cabecalho, arqDados);
+    
+    cabecalhoIndice.status = '1';
     atualizaCabecalhoIndice(&cabecalhoIndice, arqIndice);
 
     fclose(arqDados);
     fclose(arqIndice);
     
-    BinarioNaTela(arqDadosNome);
     BinarioNaTela(arqIndiceNome);
 }
