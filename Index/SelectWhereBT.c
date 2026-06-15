@@ -22,7 +22,7 @@ void SELECT_TREE()
     lerCabecalhoBin(arqDados, &cabecalho);
 
     CABECALHO_ARVOREB cabecalhoIndice;
-    lerCabecalhoIndice(&cabecalhoIndice, arqIndice);
+    lerCabecalhoIndice(arqIndice, &cabecalhoIndice );
 
     // Registro para cada registro lido do arquivo
     REGISTRO regLido;
@@ -48,11 +48,11 @@ void SELECT_TREE()
         {
             // Pulamos diretamente pro registro com o codEstacao buscado através da árvore que retorna seu offset.
             // Se o Offset = 17 + (RRN * 80), então o RRN = (Offset - 17)/80
-            int offsetReg = buscaChave(regBusca.codEstacao, cabecalhoIndice.noRaiz, arqIndice);
+            int rrnEncontrado = buscaChave(regBusca.codEstacao, cabecalhoIndice.noRaiz, arqIndice);
 
-            if(offsetReg != -1)
+            if(rrnEncontrado != -1)
             {
-                LerRegistroBin(arqDados, &regLido, (offsetReg - 17)/80);
+                LerRegistroBin(arqDados, &regLido, rrnEncontrado);
 
                 if(ComparaRegistros(&regBusca, &regLido) && regLido.removido == '0')
                 {

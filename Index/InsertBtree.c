@@ -89,9 +89,12 @@ int inserirRecursivo(int rrnAtual, int chave, int PonteiroRef, int* chavePromovi
 
     // Atualiza a página atual (Nó Esquerdo)
     NO_ARVOREB esq = criarNoVazio(paginaAtual.tipoNo);
-    esq.C[0] = ChaveTemp[0]; esq.PR[0] = PonteiroRefTemp[0];
-    esq.C[1] = ChaveTemp[1]; esq.PR[1] = PonteiroRefTemp[1];
-    esq.P[0] = P_temp[0]; esq.P[1] = P_temp[1]; esq.P[2] = P_temp[2];
+    esq.C[0] = ChaveTemp[0]; 
+    esq.PR[0] = PonteiroRefTemp[0];
+    esq.C[1] = ChaveTemp[1]; 
+    esq.PR[1] = PonteiroRefTemp[1];
+    esq.P[0] = P_temp[0]; esq.P[1] = P_temp[1]; 
+    esq.P[2] = P_temp[2];
     esq.nroChaves = 2;
 
   
@@ -100,8 +103,10 @@ int inserirRecursivo(int rrnAtual, int chave, int PonteiroRef, int* chavePromovi
 
     // Cria a Nova Página (Nó Direito)
     NO_ARVOREB dir = criarNoVazio(paginaAtual.tipoNo);
-    dir.C[0] = ChaveTemp[3]; dir.PR[0] = PonteiroRefTemp[3];
-    dir.P[0] = P_temp[3]; dir.P[1] = P_temp[4];
+    dir.C[0] = ChaveTemp[3]; 
+    dir.PR[0] = PonteiroRefTemp[3];
+    dir.P[0] = P_temp[3]; 
+    dir.P[1] = P_temp[4];
     dir.nroChaves = 1;
     *rrnFilhoDireito = cabecalho->proxRRN; // Pega o RRN vazio disponível
 

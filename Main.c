@@ -13,12 +13,18 @@ Pedro Tiago Biffi - 16827777
 #include "LogicaBusca.h"
 
 // Arquivos de cada uma das 6 funcionalidades
-#include "CreateTable.h"
-#include "SelectFrom.h"
-#include "SelectWhere.h"
-#include "Delete.h"
-#include "Insert.h"
-#include "Update.h"
+#include "Dados/CreateTable.h"
+#include "Dados/SelectFrom.h"
+#include "Dados/SelectWhere.h"
+#include "Dados/Delete.h"
+#include "Dados/Insert.h"
+#include "Dados/Update.h"
+
+// Arquivos da funcionalidades da árvore B
+#include "Index/CreateIndex.h"
+#include "Index/SelectWhereBT.h"
+#include "Index/InsertBtree.h"
+
 
 int main(){
     // Lendo entrada de qual será a funcionalidade executada
@@ -44,6 +50,12 @@ int main(){
             break;
         case 6:
             UPDATE();
+            break;
+        case 7:
+            CREATE_INDEX();
+            break;
+        case 8:
+            SELECT_TREE();
             break;
         default:
             printf("Entrada inválida!");
