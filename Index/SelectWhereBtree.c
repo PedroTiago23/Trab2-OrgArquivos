@@ -1,7 +1,7 @@
 // Depois mudar para selectwherebt.h
 #include "BTree.h"
 
-void SELECT_TREE()
+void SELECT_INDEX()
 {
     // Leitura do arquivo de dados e do arquivo de índice.
     char arqDadosNome[32], arqIndiceNome[32];
