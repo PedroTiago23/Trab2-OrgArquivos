@@ -12,7 +12,7 @@ Pedro Tiago Biffi - 16827777
 #include "ArquivoIO.h"
 #include "LogicaBusca.h"
 
-// Arquivos de cada uma das 6 funcionalidades
+// Arquivos de cada uma das 6 funcionalidades do Trabalho introdutório
 #include "Dados/CreateTable.h"
 #include "Dados/SelectFrom.h"
 #include "Dados/SelectWhere.h"
@@ -20,11 +20,11 @@ Pedro Tiago Biffi - 16827777
 #include "Dados/Insert.h"
 #include "Dados/Update.h"
 
-// Arquivos da funcionalidades da árvore B
+// Arquivos de cada uma das 4 funcionalidades do Trabalho 1
 #include "Index/CreateIndex.h"
-#include "Index/SelectWhereBT.h"
+#include "Index/SelectWhereBtree.h"
 #include "Index/InsertBtree.h"
-
+#include "Index/DeleteBtree.h"
 
 int main(){
     // Lendo entrada de qual será a funcionalidade executada
@@ -55,7 +55,12 @@ int main(){
             CREATE_INDEX();
             break;
         case 8:
-            SELECT_TREE();
+            SELECT_INDEX();
+            break;
+        case 9:
+            break;
+        case 10:
+            DELETE_INDEX();
             break;
         default:
             printf("Entrada inválida!");

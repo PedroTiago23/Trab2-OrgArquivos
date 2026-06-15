@@ -1,13 +1,24 @@
 #include "DeleteBtree.h"
 
+
+// Usada para avaliar se uma página está abaixo do mínimo de chaves ()
+int contarChaves()
+{
+
+}
+
 // Remove os espaços vazios entre as chaves.
 void reorganizarPagina(NO_ARVOREB* pagina)
 {
 
 }
 
+// Recursão para descermos na árvore em busca da chave a ser removida, seja em nó folha ou intermediário.
+// Retorna 1 apenas se a página atual estiver com underflow, senão retorna 0. 
 int removerRecursivo(int chave, int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* cabecalhoIndice)
 {
+    if(noRRN == -1)
+        return 0;
 
     NO_ARVOREB paginaAtual;
     lerRegistroIndice(&paginaAtual, noRRN, arqIndice);
@@ -23,6 +34,9 @@ int removerRecursivo(int chave, int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* c
         {
             paginaAtual.C[i] = -1;
             paginaAtual.PR[i] = -1;
+
+            reorganizarPagina(&paginaAtual);
+            
         }
         else    // Caso contrário, devemos trocar a chave com seu sucessor imediato.
         {
@@ -38,16 +52,15 @@ int removerRecursivo(int chave, int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* c
                 else 
                 sucessorRRN = paginaSucessor.P[0];
             }
-            // Atualizando chaves e referências.
-            paginaAtual.C[i] = paginaSucessor.C[0];
-            paginaAtual.PR[i] = paginaSucessor.PR[0];
+            
+            int chaveSucessor = paginaSucessor.C[0];
+            int referenciaSucessor = paginaSucessor.PR[0];
 
-            paginaSucessor.C[0] = -1;
-            paginaSucessor.PR[0] = -1;
+            paginaAtual.C[i] = chaveSucessor;
+            paginaAtual.PR[i] = referenciaSucessor;
+
+            removerRecursivo(chaveSucessor, paginaAtual.P[i+1], arqIndice, cabecalhoIndice);
         }
-        reorganizarPagina(&paginaAtual);
-
-        // A partir daqui, verificar se a taxa de ocupação está consistente.
     }
 
     // Caso procuramos na página, não encontramos e não tem onde prosseguir.
@@ -56,7 +69,7 @@ int removerRecursivo(int chave, int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* c
 
     // Se tivermos páginas com chaves maiores que a procurada para continuarmos.
     noRRN = paginaAtual.P[i]; 
-    removerRecursivo(chave, noRRN, arqIndice, &cabecalhoIndice);
+    removerRecursivo(chave, noRRN, arqIndice, cabecalhoIndice);
 }
 
 // Função para iniciar todo o processo de remoção de uma chave da árvore-B.
