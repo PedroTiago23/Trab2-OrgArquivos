@@ -1,5 +1,5 @@
-#ifndef CREATE_INDEX
-#define CREATE_INDEX
+#ifndef CREATE_TREE
+#define CREATE_TREE
 
 #include "BTree.h"
 

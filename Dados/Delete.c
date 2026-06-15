@@ -32,7 +32,7 @@ void DELETE(){
     CABECALHO cabecalho;
     lerCabecalhoBin(arqBIN, &cabecalho);
 
-    // Marca o arquivo como incosistento durante o processo
+    // Marca o arquivo como incosistente durante o processo
     cabecalho.status = '0';
     fseek(arqBIN, 0, SEEK_SET);
     fwrite(&cabecalho.status, sizeof(char), 1, arqBIN);
