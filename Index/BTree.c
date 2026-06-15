@@ -104,4 +104,3 @@ int buscaChave(int chave, int noRRN, FILE* arqIndice)
     noRRN = registroNo.P[i]; 
     return buscaChave(chave, noRRN, arqIndice);
 }
-

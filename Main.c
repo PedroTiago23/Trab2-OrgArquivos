@@ -12,13 +12,19 @@ Pedro Tiago Biffi - 16827777
 #include "ArquivoIO.h"
 #include "LogicaBusca.h"
 
-// Arquivos de cada uma das 6 funcionalidades
-#include "CreateTable.h"
-#include "SelectFrom.h"
-#include "SelectWhere.h"
-#include "Delete.h"
-#include "Insert.h"
-#include "Update.h"
+// Arquivos de cada uma das 6 funcionalidades do Trabalho introdutório
+#include "Dados/CreateTable.h"
+#include "Dados/SelectFrom.h"
+#include "Dados/SelectWhere.h"
+#include "Dados/Delete.h"
+#include "Dados/Insert.h"
+#include "Dados/Update.h"
+
+// Arquivos de cada uma das 4 funcionalidades do Trabalho 1
+#include "Index/CreateIndex.h"
+#include "Index/SelectWhereBtree.h"
+#include "Index/InsertBtree.h"
+#include "Index/DeleteBtree.h"
 
 int main(){
     // Lendo entrada de qual será a funcionalidade executada
@@ -44,6 +50,17 @@ int main(){
             break;
         case 6:
             UPDATE();
+            break;
+        case 7:
+            CREATE_INDEX();
+            break;
+        case 8:
+            SELECT_INDEX();
+            break;
+        case 9:
+            break;
+        case 10:
+            DELETE_INDEX();
             break;
         default:
             printf("Entrada inválida!");
