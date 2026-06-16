@@ -8,6 +8,7 @@ Pedro Tiago Biffi - 16827777
 #define CREATE_TREE
 
 #include "BTree.h"
+#include "InsertBtree.h"
 
 void CREATE_INDEX();
 

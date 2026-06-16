@@ -5,9 +5,6 @@ Pedro Tiago Biffi - 16827777
 */
 
 #include "CreateTable.h"
-#include "ArquivoIO.h"
-#include "LogicaBusca.h"
-#include "fornecidas.h"
 
 // Função usada para ler um único campo de inteiro no arquivo .csv
 void lerIntCSV(int* campoRegistro, char** separationPtr)
@@ -83,7 +80,7 @@ void CREATE_TABLE()
     cabecalhoInicial.proxRRN = 0;
     cabecalhoInicial.nroEstacoes = 0;
     cabecalhoInicial.nroParesEstacoes = 0;
-    atualizarCabecalho(arqBIN, &cabecalhoInicial);
+    atualizarCabecalho(&cabecalhoInicial, arqBIN);
 
     REGISTRO RegTransferencia;
     RegTransferencia.removido = '0';
@@ -115,7 +112,7 @@ void CREATE_TABLE()
     
     cabecalhoInicial.status = '1';
     // Gravar o cabeçalho de volta no disco para consolidar as alterações
-    atualizarCabecalho(arqBIN, &cabecalhoInicial);
+    atualizarCabecalho(&cabecalhoInicial, arqBIN);
 
     fclose(arqCSV);
     fclose(arqBIN);

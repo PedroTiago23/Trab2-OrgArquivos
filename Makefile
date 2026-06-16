@@ -1,5 +1,5 @@
 all:
-	gcc -o ExecutavelPimpao *.c
+	gcc -o project_main *.c Dados/*.c Index/*.c
 
 run:
-	./ExecutavelPimpao
+	./project_main

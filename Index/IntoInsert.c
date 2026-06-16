@@ -4,7 +4,7 @@ Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */
 
-#include "intoInsert.h"
+#include "IntoInsert.h"
 
 void INSERT_INDEX() {
 
@@ -23,12 +23,12 @@ void INSERT_INDEX() {
     lerCabecalhoBin(arqDados, &cabecalhoDados);
     
     CABECALHO_ARVOREB cabecalhoIndice;
-    lerCabecalhoIndice(&cabecalhoIndice, arqIndice);
+    lerCabecalhoIndice(arqIndice, &cabecalhoIndice);
 
     // Defini como incosistente o arquivo antes de começar a mexer
     cabecalhoDados.status = '0';
     
-    atualizaCabecalhoBin(&cabecalhoDados, arqDados);
+    atualizarCabecalho(&cabecalhoDados, arqDados);
 
     cabecalhoIndice.status = '0';
     atualizaCabecalhoIndice(&cabecalhoIndice, arqIndice);
@@ -49,8 +49,8 @@ void INSERT_INDEX() {
         if (cabecalhoDados.topo == -1) {
             // Se não tem registro removido, insere no final
             rrnInserido = cabecalhoDados.proxRRN;
-            
-            EscreveRegistroBin(arqDados, &novoReg, rrnInserido);
+            fseek(arqDados, 17 + (80 * rrnInserido), SEEK_SET);
+            EscreverRegistroBin(arqDados, &novoReg);
             
             cabecalhoDados.proxRRN++;
         } else {
@@ -58,7 +58,7 @@ void INSERT_INDEX() {
             rrnInserido = cabecalhoDados.topo;
             
             // Calcula o byte  onde o registro removido começa no arquivo de dados
-            long offsetRemovido = 17 + ((long)rrnInserido * 80);
+            long offsetRemovido = 17 + (rrnInserido * 80);
             fseek(arqDados, offsetRemovido, SEEK_SET);
 
             // Ler o  RRN removido que estava salvo lá.
@@ -69,14 +69,12 @@ void INSERT_INDEX() {
             fread(&proximoRRN, sizeof(int), 1, arqDados);
 
             //  Atualiza o cabecalhoDados.topo com esse valor.
-            // A pilha desce, o próximo removido agora é o novo topo.
             cabecalhoDados.topo = proximoRRN;
 
             // Sobrescreve o registro no rrnInserido com o novoReg.
-            // Volta o ponteiro do arquivo para o início offset removido para escrever por cima.
             fseek(arqDados, offsetRemovido, SEEK_SET);
 
-            EscreveRegistroBin(arqDados, &novoReg, rrnInserido);
+            EscreverRegistroBin(arqDados, &novoReg);
         }
 
         // Atualiza o índice
@@ -89,7 +87,7 @@ void INSERT_INDEX() {
     // Fecha tudo e deixa como status consistente 
     cabecalhoDados.status = '1';
     
-    atualizaCabecalhoBin(&cabecalhoDados, arqDados);
+    atualizarCabecalho(&cabecalhoDados, arqDados);
 
     cabecalhoIndice.status = '1';
     atualizaCabecalhoIndice(&cabecalhoIndice, arqIndice);

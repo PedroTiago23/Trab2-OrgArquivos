@@ -130,7 +130,7 @@ int inserirRecursivo(int rrnAtual, int chave, int PonteiroRef, int* chavePromovi
 void inserirNaArvoreB(FILE* arqIndice, CABECALHO_ARVOREB* cabecalho, int chave, int PonteiroRef) {
     
     // Caso a árvore esteja vazia
-    if (BtreeVazia(cabecalho)) {
+    if (cabecalho->nroNos == 0) {
         NO_ARVOREB novaRaiz = criarNoVazio(-1); // -1 = Nó folha
         novaRaiz.C[0] = chave;
         novaRaiz.PR[0] = PonteiroRef;

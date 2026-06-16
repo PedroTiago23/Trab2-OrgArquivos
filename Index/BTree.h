@@ -24,6 +24,6 @@ void lerRegistroIndice(NO_ARVOREB* registroNo, int RRN, FILE* arqIndice);
 
 int buscaChave(int chave, int noRRN, FILE* arqIndice);
 
-
+void escreverNoArvoreB(FILE* arqIndice, NO_ARVOREB* pagina, int noRRN);
 
 #endif

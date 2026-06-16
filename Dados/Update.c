@@ -5,9 +5,6 @@ Pedro Tiago Biffi - 16827777
 */
 
 #include "Update.h"
-#include "ArquivoIO.h"
-#include "LogicaBusca.h"
-#include "fornecidas.h"
 
 // Parte principal da funcionalidade de Update, que atualiza campos
 // específicos de registros conforme o que foi pedido na busca.
@@ -27,7 +24,7 @@ void UPDATE() {
     
     // Define o arquivo como inconsistente durante as alterações
     cabecalho.status = '0';
-    atualizarCabecalho(arqBIN, &cabecalho);
+    atualizarCabecalho(&cabecalho, arqBIN);
 
     int qtdUpdates;
     scanf("%d", &qtdUpdates);
@@ -113,7 +110,7 @@ void UPDATE() {
     // Tornando o arquivo consistente de novo e atualizando seus contadoes de estação e par
     cabecalho.status = '1';
     recalcularContadores(arqBIN, &cabecalho);
-    atualizarCabecalho(arqBIN, &cabecalho);
+    atualizarCabecalho(&cabecalho, arqBIN);
 
     fclose(arqBIN);
 

@@ -5,44 +5,6 @@ Pedro Tiago Biffi - 16827777
 */
 
 #include "Insert.h"
-#include "ArquivoIO.h"
-#include "LogicaBusca.h"
-#include "fornecidas.h"
-
-// Função usada para ler todos os campos na ordem certa diretamente do terminal onde o 
-// código está sendo rodado
-void lerRegistroTerminal(REGISTRO* novoRegistro)
-{
-    novoRegistro->removido = '0';
-    novoRegistro->proximo = -1;
-
-    char strAtual[50] = "";
-
-    #define LE_INT(StringAtual, campo) \
-        ScanQuoteString(StringAtual); \
-        leIntCampoBusca(&novoRegistro->campo, StringAtual);
-
-    #define LE_STRING(StringAtual, campo1, campo2) \
-        ScanQuoteString(StringAtual); \
-        leStringCampoBusca(&novoRegistro->campo1, &novoRegistro->campo2, StringAtual);
-    
-        
-    LE_INT(strAtual, codEstacao);
-    LE_STRING(strAtual, tamNomeEstacao, nomeEstacao);
-    
-    LE_INT(strAtual, codLinha);
-    LE_STRING(strAtual, tamNomeLinha, nomeLinha)
-    
-    LE_INT(strAtual, codProxEstacao);
-    LE_INT(strAtual, distProxEstacao);
-    LE_INT(strAtual, codLinhaIntegra);
-    LE_INT(strAtual, codEstIntegra);
-
-    #undef LE_INT
-    #undef LE_STRING
-
-    return;
-}
 
 // Trecho principal da funcionalidade de Insert, que adiciona um novo registro
 // determinado pelo terminal em um arquivo binário, a partir da abordagem dinâmica 
@@ -105,7 +67,7 @@ void INSERT()
 
     recalcularContadores(arqBIN, &cabecalho);
 
-    atualizarCabecalho(arqBIN, &cabecalho);
+    atualizarCabecalho(&cabecalho, arqBIN);
 
     fclose(arqBIN);
 

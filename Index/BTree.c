@@ -110,3 +110,32 @@ int buscaChave(int chave, int noRRN, FILE* arqIndice)
     noRRN = registroNo.P[i]; 
     return buscaChave(chave, noRRN, arqIndice);
 }
+
+void escreverNoArvoreB(FILE* arqIndice, NO_ARVOREB* pagina, int noRRN)
+{
+    int paginaOffset = 17 + (noRRN * 53);
+    fseek(arqIndice, paginaOffset, SEEK_SET);
+
+    fwrite(&pagina->removido, sizeof(char), 1, arqIndice);
+
+    #define escreverCampo(item) \
+        fwrite(&pagina->item, sizeof(int), 1, arqIndice)
+
+    escreverCampo(proximo);
+    escreverCampo(tipoNo);
+    escreverCampo(nroChaves);
+    escreverCampo(P[0]);
+    escreverCampo(C[0]);
+    escreverCampo(PR[0]);
+    escreverCampo(P[1]);
+    escreverCampo(C[1]);
+    escreverCampo(PR[1]);
+    escreverCampo(P[2]);
+    escreverCampo(C[2]);
+    escreverCampo(PR[2]);
+    escreverCampo(P[3]);
+
+    #undef escreverCampo
+
+    return;
+}

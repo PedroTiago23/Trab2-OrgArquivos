@@ -8,6 +8,10 @@ Pedro Tiago Biffi - 16827777
 #define SELECTFROM 
 
 #include <stdbool.h>
+#include "../Estruturas.h"
+#include "../ArquivoIO.h"
+#include "../LogicaBusca.h"
+#include "../fornecidas.h"
 
 void SELECT();
 

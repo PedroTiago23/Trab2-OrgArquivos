@@ -7,9 +7,11 @@ Pedro Tiago Biffi - 16827777
 #ifndef INSERT_H
 #define INSERT_H
 
-#include "Estruturas.h"
-
-void lerRegistroTerminal(REGISTRO* novoRegistro);
+#include <stdio.h>
+#include "../Estruturas.h"
+#include "../ArquivoIO.h"
+#include "../LogicaBusca.h"
+#include "../fornecidas.h"
 
 void INSERT();
 

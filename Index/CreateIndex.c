@@ -54,7 +54,7 @@ void CREATE_INDEX()
     }
 
     // Atualiza os dados no cabeçalho do arquivo de índice.
-    cabecalhoTree.status = "1";
+    cabecalhoTree.status = '1';
     atualizaCabecalhoIndice(&cabecalhoTree, arqIndice);
 
     fclose(arqDados);

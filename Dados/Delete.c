@@ -9,10 +9,6 @@ Pedro Tiago Biffi - 16827777
 // dinâmica de reaproveitamento de espaço
 
 #include "Delete.h"
-#include <stdlib.h>
-#include "ArquivoIO.h"
-#include "LogicaBusca.h"
-#include "fornecidas.h"
 
 void DELETE(){
     
@@ -78,7 +74,7 @@ void DELETE(){
 
     cabecalho.status = '1';
     recalcularContadores(arqBIN, &cabecalho);
-    atualizarCabecalho(arqBIN, &cabecalho);
+    atualizarCabecalho(&cabecalho, arqBIN);
 
     fclose(arqBIN);
     

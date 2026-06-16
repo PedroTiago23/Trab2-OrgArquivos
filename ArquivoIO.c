@@ -59,7 +59,7 @@ void lerCabecalhoBin(FILE* arqBIN, CABECALHO* cabecalho) {
 }
 
 // Função para sobrescrever o registro de cabeçalho do arquivo binário com novos dados
-void atualizarCabecalho(FILE* arqBIN, CABECALHO* regCabecalho) {
+void atualizarCabecalho(CABECALHO* regCabecalho, FILE* arqBIN) {
     fseek(arqBIN, 0, SEEK_SET);
     
     fwrite(&regCabecalho->status, sizeof(char), 1, arqBIN);
@@ -165,6 +165,41 @@ void EscreverRegistroBin(FILE *arqBIN, REGISTRO *reg) {
     for(int i = 0; i < TAM_REGISTRO - BytesEscritos; i++)
         fputc('$', arqBIN);
     
+    return;
+}
+
+// Função usada para ler todos os campos na ordem certa diretamente do terminal onde o 
+// código está sendo rodado
+void lerRegistroTerminal(REGISTRO* novoRegistro)
+{
+    novoRegistro->removido = '0';
+    novoRegistro->proximo = -1;
+
+    char strAtual[50] = "";
+
+    #define LE_INT(StringAtual, campo) \
+        ScanQuoteString(StringAtual); \
+        leIntCampoBusca(&novoRegistro->campo, StringAtual);
+
+    #define LE_STRING(StringAtual, campo1, campo2) \
+        ScanQuoteString(StringAtual); \
+        leStringCampoBusca(&novoRegistro->campo1, &novoRegistro->campo2, StringAtual);
+    
+        
+    LE_INT(strAtual, codEstacao);
+    LE_STRING(strAtual, tamNomeEstacao, nomeEstacao);
+    
+    LE_INT(strAtual, codLinha);
+    LE_STRING(strAtual, tamNomeLinha, nomeLinha)
+    
+    LE_INT(strAtual, codProxEstacao);
+    LE_INT(strAtual, distProxEstacao);
+    LE_INT(strAtual, codLinhaIntegra);
+    LE_INT(strAtual, codEstIntegra);
+
+    #undef LE_INT
+    #undef LE_STRING
+
     return;
 }
 

@@ -283,10 +283,10 @@ void DELETE_INDEX() {
     CABECALHO cabecalho;
     lerCabecalhoBin(arqDados, &cabecalho);
     CABECALHO_ARVOREB cabecalhoIndice;
-    lerCabecalhoIndice(&cabecalhoIndice, arqIndice); 
+    lerCabecalhoIndice(arqIndice, &cabecalhoIndice); 
 
     cabecalho.status = '0';
-    atualizaCabecalhoBin(&cabecalho, arqDados);
+    atualizarCabecalho(&cabecalho, arqDados);
 
     cabecalhoIndice.status = '0';
     atualizaCabecalhoIndice(&cabecalhoIndice, arqIndice);
@@ -338,7 +338,7 @@ void DELETE_INDEX() {
 
     cabecalho.status = '1';
     recalcularContadores(arqDados, &cabecalho);
-    atualizaCabecalhoBin(&cabecalho, arqDados);
+    atualizarCabecalho(&cabecalho, arqDados);
     
     cabecalhoIndice.status = '1';
     atualizaCabecalhoIndice(&cabecalhoIndice, arqIndice);

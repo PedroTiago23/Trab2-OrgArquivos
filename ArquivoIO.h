@@ -11,6 +11,8 @@ Pedro Tiago Biffi - 16827777
 #include <stdlib.h>
 #include <string.h>
 #include "Estruturas.h"
+#include "LogicaBusca.h"
+#include "fornecidas.h"
 
 void imprimeCampoInt(int campo);
 
@@ -18,11 +20,13 @@ void imprimirRegistro(REGISTRO* reg);
 
 void lerCabecalhoBin(FILE* arqBIN, CABECALHO* cabecalho);
 
-void atualizarCabecalho(FILE* arqBIN, CABECALHO* regCabecalho);
+void atualizarCabecalho(CABECALHO* regCabecalho, FILE* arqBIN);
 
 void LerRegistroBin(FILE* arqBIN, REGISTRO* reg, int PosicaoRRN);
 
 void EscreverRegistroBin(FILE *arqBIN, REGISTRO *reg);
+
+void lerRegistroTerminal(REGISTRO* novoRegistro);
 
 void removerRegistro(FILE* arqBIN, int RRN, int proximo);
 
