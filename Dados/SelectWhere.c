@@ -1,5 +1,5 @@
 /*
-Implementação da funcionalidade 3 de Select Where 
+Implementação da funcionalidade 3 de Select Where.
 Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */

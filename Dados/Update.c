@@ -1,5 +1,5 @@
 /*
-Implementação da funcionalidade 6 de Update 
+Implementação da funcionalidade 6 de Update.
 Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */

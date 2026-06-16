@@ -1,3 +1,9 @@
+/*
+Funções fundamentais para a inserção correta em Árvore-B.
+Bruno Dias de Campos Filho - 16832658
+Pedro Tiago Biffi - 16827777
+*/
+
 #include "InsertBtree.h"
 
 int inserirRecursivo(int rrnAtual, int chave, int PonteiroRef, int* chavePromovida, int* PonteiroRefPromovido, int* rrnFilhoDireito, FILE* arqIndice, CABECALHO_ARVOREB* cabecalho) {

@@ -1,3 +1,9 @@
+/*
+Declarações do Módulo de I/O de Arquivos
+Bruno Dias de Campos Filho - 16832658
+Pedro Tiago Biffi - 16827777
+*/
+
 #ifndef ARQUIVOIO
 #define ARQUIVOIO
 

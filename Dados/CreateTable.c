@@ -1,5 +1,5 @@
 /*
-Implementação da funcionalidade 1 de Criação de Tabela
+Implementação da funcionalidade 1 de Criação de Tabela.
 Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */

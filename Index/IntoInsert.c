@@ -1,6 +1,12 @@
+/*
+Funcionalidade 9 - Inserção usando o arquivo de índice.
+Bruno Dias de Campos Filho - 16832658
+Pedro Tiago Biffi - 16827777
+*/
+
 #include "intoInsert.h"
 
-void INSERT_TREE() {
+void INSERT_INDEX() {
 
     char arqDadosNome[32], arqIndiceNome[32];
     scanf("%s %s", arqDadosNome, arqIndiceNome);

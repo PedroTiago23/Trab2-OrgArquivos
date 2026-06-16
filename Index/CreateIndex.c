@@ -1,7 +1,10 @@
-// Funcionalidade 7 - Criação do Índice
+/*
+Funcionalidade 7 - Criação do Índice
+Bruno Dias de Campos Filho - 16832658
+Pedro Tiago Biffi - 16827777
+*/
 
-// Mudar para CreateIndex.h depois.
-#include "BTree.h"
+#include "CreateIndex.h"
 
 // Trecho principal para a funcionalidade de criar um arquivo de índice para
 // o arquivo de dados do trabalho introdutório. 
@@ -43,6 +46,7 @@ void CREATE_INDEX()
         if (reg.removido == '0')
         {
             inserirNaArvoreB(arqIndice, &cabecalhoTree, reg.codEstacao, rrnDados);
+            // Atualizar valores do cabeçalho.
         }
 
         liberaStringsRegistro(&reg); // Para não dar memory leak.

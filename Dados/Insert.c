@@ -1,5 +1,5 @@
 /*
-Implementação da funcionalidade 4 de Insert 
+Implementação da funcionalidade 4 de Insert.
 Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */

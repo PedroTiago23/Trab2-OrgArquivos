@@ -1,3 +1,9 @@
+/*
+Declarações das funções relacionada a lógica e busca de registros.
+Bruno Dias de Campos Filho - 16832658
+Pedro Tiago Biffi - 16827777
+*/
+
 #ifndef LOGICABUSCA
 #define LOGICABUSCA
 

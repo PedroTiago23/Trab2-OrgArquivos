@@ -23,7 +23,7 @@ Pedro Tiago Biffi - 16827777
 // Arquivos de cada uma das 4 funcionalidades do Trabalho 1
 #include "Index/CreateIndex.h"
 #include "Index/SelectWhereBtree.h"
-#include "Index/InsertBtree.h"
+#include "Index/IntoInsert.h"
 #include "Index/DeleteBtree.h"
 
 int main(){
@@ -58,6 +58,7 @@ int main(){
             SELECT_INDEX();
             break;
         case 9:
+            INSERT_INDEX();
             break;
         case 10:
             DELETE_INDEX();

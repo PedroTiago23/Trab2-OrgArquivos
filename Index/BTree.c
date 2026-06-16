@@ -1,5 +1,11 @@
-#include "BTree.h"
+/*
+Funções importantes para manipulação do arquivo de índice com Árvore-B
+Bruno Dias de Campos Filho - 16832658
+Pedro Tiago Biffi - 16827777
+*/
 
+
+#include "BTree.h"
 
 // Cria um nó vazio 
 // tipoNo: -1 (Folha), 0 (Raiz) ou 1 (Intermediário)

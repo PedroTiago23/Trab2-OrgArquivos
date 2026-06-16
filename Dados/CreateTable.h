@@ -1,3 +1,10 @@
+/*
+Declarações de Create Table
+Bruno Dias de Campos Filho - 16832658
+Pedro Tiago Biffi - 16827777
+*/
+
+
 #ifndef CREATETABLE
 #define CREATETABLE 
 

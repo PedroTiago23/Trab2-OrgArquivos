@@ -1,3 +1,7 @@
+/*
+Declaração para a funcionalidade 8.
+*/
+
 #ifndef SELECT_TREE
 #define SELECT_TREE
 

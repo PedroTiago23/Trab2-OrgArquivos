@@ -1,5 +1,11 @@
-#include "DeleteBtree.h"
+/*
+Funcionalidade 10 - Remoção de uma chave usando arquivo de índice.
+Bruno Dias de Campos Filho - 16832658
+Pedro Tiago Biffi - 16827777
+*/
 
+
+#include "DeleteBtree.h"
 
 // Usada para avaliar se uma página está abaixo do mínimo de chaves 
 int contarChaves(NO_ARVOREB* pagina) 

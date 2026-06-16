@@ -1,5 +1,10 @@
-// Depois mudar para selectwherebt.h
-#include "BTree.h"
+/*
+Funcionalidade 8 - Recuperação de registros por campos usando o arquivo de índice.
+Bruno Dias de Campos Filho - 16832658
+Pedro Tiago Biffi - 16827777
+*/
+
+#include "SelectWhereBtree.h"
 
 void SELECT_INDEX()
 {
