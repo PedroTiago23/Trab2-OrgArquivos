@@ -107,7 +107,7 @@ void UPDATE() {
 
     }
 
-    // Tornando o arquivo consistente de novo e atualizando seus contadoes de estação e par
+    // Tornando o arquivo consistente de novo e atualizando seus contadoes de estação e par.
     cabecalho.status = '1';
     recalcularContadores(arqBIN, &cabecalho);
     atualizarCabecalho(&cabecalho, arqBIN);

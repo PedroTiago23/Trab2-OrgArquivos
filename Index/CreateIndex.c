@@ -44,10 +44,7 @@ void CREATE_INDEX()
 
         // Apenas registros ativos são indexados.
         if (reg.removido == '0')
-        {
             inserirNaArvoreB(arqIndice, &cabecalhoTree, reg.codEstacao, rrnDados);
-            // Atualizar valores do cabeçalho.
-        }
 
         liberaStringsRegistro(&reg); // Para não dar memory leak.
         rrnDados++;

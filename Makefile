@@ -3,3 +3,6 @@ all:
 
 run:
 	./project_main
+
+clean:
+	rm project_main

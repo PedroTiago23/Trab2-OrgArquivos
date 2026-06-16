@@ -86,7 +86,7 @@ void INSERT_INDEX() {
 
     // Fecha tudo e deixa como status consistente 
     cabecalhoDados.status = '1';
-    
+    recalcularContadores(arqDados, &cabecalhoDados);
     atualizarCabecalho(&cabecalhoDados, arqDados);
 
     cabecalhoIndice.status = '1';
