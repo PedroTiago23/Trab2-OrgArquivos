@@ -21,14 +21,14 @@ int contarChaves(NO_ARVOREB* pagina)
 
 // Remove os espaços vazios entre as chaves.
 void reorganizarPagina(NO_ARVOREB* pagina, int posicaoRemovida) {
-    for (int j = posicaoRemovida; j < pagina->nroChaves - 1; j++) {
+    for (int j = posicaoRemovida; j < pagina->nroChaves-1; j++) {
         pagina->C[j] = pagina->C[j+1];
         pagina->PR[j] = pagina->PR[j+1];
         pagina->P[j+1] = pagina->P[j+2]; 
     }
     
     // Tira a última posição que ficou duplicada
-    int ultimaPos = pagina->nroChaves - 1;
+    int ultimaPos = pagina->nroChaves-1;
     pagina->C[ultimaPos] = -1;
     pagina->PR[ultimaPos] = -1;
     if (pagina->tipoNo != -1) {
@@ -36,6 +36,14 @@ void reorganizarPagina(NO_ARVOREB* pagina, int posicaoRemovida) {
     }
     
     pagina->nroChaves--;
+}
+
+// Dado uma página abaixo do mínimo de chaves, tenta redistribuição ou concatenação para resolver.
+// Resolver propagação de overflow. Retorna *?*
+// Redistribuição direita -> esquerda -> Concatenação esquerda -> direita.
+int tratarUnderflow(int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* CabecalhoIndice)
+{
+
 }
 
 // Recursão para descermos na árvore em busca da chave a ser removida, seja em nó folha ou intermediário.
