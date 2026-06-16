@@ -130,11 +130,11 @@ void reorganizarPagina(NO_ARVOREB* pagina, int posicaoRemovida) {
 // Dado uma página abaixo do mínimo de chaves, tenta redistribuição ou concatenação para resolver.
 // Resolver propagação de overflow. Retorna 1 caso o nó pai esteja com underflow após a concatenação.
 // Redistribuição direita -> esquerda -> Concatenação esquerda -> direita.
-int tratarUnderflow(int filhoIndice, int paiRRN, NO_ARVOREB* noPai, FILE* arqIndice, CABECALHO_ARVOREB* CabecalhoIndice)
+int tratarUnderflow(int filhoIndice, int paiRRN, NO_ARVOREB* noPai, FILE* arqIndice, CABECALHO_ARVOREB* cabecalhoIndice)
 {
-    int filhoUnderflowRRN = noPai->P[filhoIndice];
+    int filhoRRN = noPai->P[filhoIndice];
     NO_ARVOREB filhoPagina;
-    lerRegistroIndice(&filhoPagina, filhoUnderflowRRN, arqIndice);
+    lerRegistroIndice(&filhoPagina, filhoRRN, arqIndice);
 
     // Tentando redistribuir com o irmão direito primeiro.
     if(noPai->P[filhoIndice+1] != -1 && filhoIndice < ORDEM_ARVORE-1)
@@ -166,9 +166,14 @@ int tratarUnderflow(int filhoIndice, int paiRRN, NO_ARVOREB* noPai, FILE* arqInd
         }
         // Se nenhuma redistribuição aconteceu, temos que concatenar o filho com um de seus irmãos.
         // Fazendo a concatenação com o irmão esquerdo, já que estamos no if() dele existir.
+
+        // Como o mínimo de chaves com ordem 4 é 1, a página filho (à direita) tem 0 chaves e pode ser excluída.
+        filhoPagina.removido = '1';
+        filhoPagina.proximo = cabecalhoIndice->topo;
+        cabecalhoIndice->topo = filhoRRN;
+
         
     }
-
     
 
 }
