@@ -111,6 +111,7 @@ int buscaChave(int chave, int noRRN, FILE* arqIndice)
     return buscaChave(chave, noRRN, arqIndice);
 }
 
+// Dado um RRN, escreve no arquivo de índice um nó com valores a partir de uma struct nó.
 void escreverNoArvoreB(FILE* arqIndice, NO_ARVOREB* pagina, int noRRN)
 {
     int paginaOffset = 17 + (noRRN * 53);
@@ -124,15 +125,15 @@ void escreverNoArvoreB(FILE* arqIndice, NO_ARVOREB* pagina, int noRRN)
     escreverCampo(proximo);
     escreverCampo(tipoNo);
     escreverCampo(nroChaves);
-    escreverCampo(P[0]);
     escreverCampo(C[0]);
     escreverCampo(PR[0]);
-    escreverCampo(P[1]);
     escreverCampo(C[1]);
     escreverCampo(PR[1]);
-    escreverCampo(P[2]);
     escreverCampo(C[2]);
     escreverCampo(PR[2]);
+    escreverCampo(P[0]);
+    escreverCampo(P[1]);
+    escreverCampo(P[2]);
     escreverCampo(P[3]);
 
     #undef escreverCampo

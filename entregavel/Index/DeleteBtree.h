@@ -23,4 +23,6 @@ int removerRecursivo(int chave, int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* c
 
 void removerChaveArvore(int chave, FILE* arqIndice, CABECALHO_ARVOREB* CabecalhoIndice);
 
+void concatenacaoArvoreB(NO_ARVOREB* pai, int posPai, NO_ARVOREB* esq, NO_ARVOREB* dir, int dirRRN, FILE* arqIndice, CABECALHO_ARVOREB* cabecalho);
+
 #endif

@@ -24,7 +24,7 @@ registerParser((filePath) => {
     let nome = filePath.toLowerCase();
 
     // ROTEAMENTO: Se o nome contiver "indice" ou "arv", desenha a Árvore B
-    if (nome.includes('indice') || nome.includes('arv')) {
+    if (nome.includes('indice') || nome.includes('arv') || nome.includes('Tree')) {
         
         // ==========================================
         // PARSER DA ÁRVORE-B (53 bytes)

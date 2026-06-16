@@ -133,58 +133,71 @@ void reorganizarPagina(NO_ARVOREB* pagina, int posicaoRemovida) {
     pagina->nroChaves--;
 }
 
-// Dado uma página abaixo do mínimo de chaves, tenta redistribuição ou concatenação para resolver.
-// Resolver propagação de overflow. Retorna 1 caso o nó pai esteja com underflow após a concatenação.
+
 // Redistribuição direita -> esquerda -> Concatenação esquerda -> direita.
-int tratarUnderflow(int filhoIndice, int paiRRN, NO_ARVOREB* noPai, FILE* arqIndice, CABECALHO_ARVOREB* cabecalhoIndice)
-{
-    int filhoRRN = noPai->P[filhoIndice];
+// Retorna 1 se o pai também ficou com 0 chaves após a concatenação
+int tratarUnderflow(int filhoIndice, int paiRRN, NO_ARVOREB* pai, FILE* arqIndice, CABECALHO_ARVOREB* cabecalho) {
+    int filhoRRN = pai->P[filhoIndice];
     NO_ARVOREB filhoPagina;
     lerRegistroIndice(&filhoPagina, filhoRRN, arqIndice);
 
-    // Tentando redistribuir com o irmão direito primeiro.
-    if(noPai->P[filhoIndice+1] != -1 && filhoIndice < ORDEM_ARVORE-1)
-    {
-        int irmaoDirRRN = noPai->P[filhoIndice+1];
+    // tenta pegar da direita
+    if (filhoIndice < pai->nroChaves) {
+        int irmaoDirRRN = pai->P[filhoIndice + 1];
         NO_ARVOREB irmaoDirPagina;
         lerRegistroIndice(&irmaoDirPagina, irmaoDirRRN, arqIndice);
 
-        if(contarChaves(&irmaoDirPagina) > MINIMO_CHAVES)
-        {
-            redistribuirUniformemente(noPai, filhoIndice, &filhoPagina, &irmaoDirPagina);
-            // Ainda não decidi em escrever aqui ou na redistribuirUniformemente().
-            return 0;
+        if (irmaoDirPagina.nroChaves > 1) { // Tem para emprestar
+            redistribuirUniformemente(pai, filhoIndice, &filhoPagina, &irmaoDirPagina);
+            escreverNoArvoreB(arqIndice, &filhoPagina, filhoRRN);
+            escreverNoArvoreB(arqIndice, &irmaoDirPagina, irmaoDirRRN);
+            escreverNoArvoreB(arqIndice, pai, paiRRN);
+            return 0; 
         }
     }
 
-    // Tentando então o esquerdo.
-    if(filhoIndice > 0)
-    {
-        int irmaoEsquerdoRRN = noPai->P[filhoIndice-1];
+    // Tenta pegar da esquerda
+    if (filhoIndice > 0) {
+        int irmaoEsqRRN = pai->P[filhoIndice - 1];
         NO_ARVOREB irmaoEsqPagina;
-        lerRegistroIndice(&irmaoEsqPagina, irmaoEsquerdoRRN, arqIndice);
+        lerRegistroIndice(&irmaoEsqPagina, irmaoEsqRRN, arqIndice);
 
-        if(contarChaves(&irmaoEsqPagina) > MINIMO_CHAVES)
-        {
-            redistribuirUniformemente(noPai, filhoIndice-1, &irmaoEsqPagina, &filhoPagina);
-            // Idem
-            return 0;
+        if (irmaoEsqPagina.nroChaves > 1) { // Tem para emprestar
+            redistribuirUniformemente(pai, filhoIndice - 1, &irmaoEsqPagina, &filhoPagina);
+            escreverNoArvoreB(arqIndice, &irmaoEsqPagina, irmaoEsqRRN);
+            escreverNoArvoreB(arqIndice, &filhoPagina, filhoRRN);
+            escreverNoArvoreB(arqIndice, pai, paiRRN);
+            return 0; 
         }
-        // Se nenhuma redistribuição aconteceu, temos que concatenar o filho com um de seus irmãos.
-        // Fazendo a concatenação com o irmão esquerdo, já que estamos no if() dele existir.
-
-        // Como o mínimo de chaves com ordem 4 é 1, a página filho (à direita) tem 0 chaves e pode ser excluída.
-        filhoPagina.removido = '1';
-        filhoPagina.proximo = cabecalhoIndice->topo;
-        cabecalhoIndice->topo = filhoRRN;
-
-        
     }
-    
 
+    //  Concatenação, caso ninguém consiga emprestar
+    if (filhoIndice < pai->nroChaves) {
+        // Junta com o da direita
+        int irmaoDirRRN = pai->P[filhoIndice + 1];
+        NO_ARVOREB irmaoDirPagina;
+        lerRegistroIndice(&irmaoDirPagina, irmaoDirRRN, arqIndice);
+
+        concatenacaoArvoreB(pai, filhoIndice, &filhoPagina, &irmaoDirPagina, irmaoDirRRN, arqIndice, cabecalho);
+        escreverNoArvoreB(arqIndice, &filhoPagina, filhoRRN);
+        escreverNoArvoreB(arqIndice, pai, paiRRN);
+    } 
+    else {
+        // Junta com o da esquerda
+        int irmaoEsqRRN = pai->P[filhoIndice - 1];
+        NO_ARVOREB irmaoEsqPagina;
+        lerRegistroIndice(&irmaoEsqPagina, irmaoEsqRRN, arqIndice);
+
+        concatenacaoArvoreB(pai, filhoIndice - 1, &irmaoEsqPagina, &filhoPagina, filhoRRN, arqIndice, cabecalho);
+        escreverNoArvoreB(arqIndice, &irmaoEsqPagina, irmaoEsqRRN);
+        escreverNoArvoreB(arqIndice, pai, paiRRN);
+    }
+
+    // Se o pai ficou com 0 chaves por causa da concatenação, o underflow vai para cima
+    return (pai->nroChaves < 1) ? 1 : 0;
 }
 
-// Recursão para descermos na árvore em busca da chave a ser removida, seja em nó folha ou intermediário.
+// Recursão para descermos na árvore em busca da chave que precisa ser removida, seja em nó folha ou intermediário.
 // Retorna 1 apenas se a página atual estiver com underflow, senão retorna 0. 
 int removerRecursivo(int chave, int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* cabecalhoIndice)
 {
@@ -230,8 +243,10 @@ int removerRecursivo(int chave, int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* c
             // Desce recursivamente para apagar o sucessor lá na folha onde ele estava
             int teveUnderflow = removerRecursivo(chaveSucessor, paginaAtual.P[i+1], arqIndice, cabecalhoIndice);
             
-            
-            return 0; 
+            if (teveUnderflow) {
+                return tratarUnderflow(i + 1, noRRN, &paginaAtual, arqIndice, cabecalhoIndice);
+            }
+            return 0;
         }
     }
 
@@ -239,12 +254,18 @@ int removerRecursivo(int chave, int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* c
     int filhoRRN = paginaAtual.P[i];
     int teveUnderflow = removerRecursivo(chave, filhoRRN, arqIndice, cabecalhoIndice);
 
-    return 0; 
+    if (teveUnderflow) {
+        return tratarUnderflow(i, noRRN, &paginaAtual, arqIndice, cabecalhoIndice);
+    }
+    return 0;
 }
 
 // Função para iniciar todo o processo de remoção de uma chave da árvore-B.
 void removerChaveArvore(int chave, FILE* arqIndice, CABECALHO_ARVOREB* cabecalhoIndice) {
-    if (cabecalhoIndice->noRaiz == -1) return;
+    if (cabecalhoIndice->noRaiz == -1) {
+      return;
+    }
+    
 
     int status = removerRecursivo(chave, cabecalhoIndice->noRaiz, arqIndice, cabecalhoIndice);
 
@@ -254,13 +275,40 @@ void removerChaveArvore(int chave, FILE* arqIndice, CABECALHO_ARVOREB* cabecalho
         lerRegistroIndice(&raizAtual, cabecalhoIndice->noRaiz, arqIndice);
         
         if (raizAtual.nroChaves == 0 && raizAtual.tipoNo != -1) {
-            // O novo RRN da raiz agpra é o único filho que sobrou
+            // O novo RRN da raiz agora é o único filho que sobrou
             cabecalhoIndice->noRaiz = raizAtual.P[0]; 
         } else if (raizAtual.nroChaves == 0 && raizAtual.tipoNo == -1) {
             // A árvore está completamente vazia
             cabecalhoIndice->noRaiz = -1;
         }
     }
+}
+
+void concatenacaoArvoreB(NO_ARVOREB* pai, int posPai, NO_ARVOREB* esq, NO_ARVOREB* dir, int dirRRN, FILE* arqIndice, CABECALHO_ARVOREB* cabecalho) {
+    
+    // A chave do pai vai para a esquerda
+    esq->C[esq->nroChaves] = pai->C[posPai];
+    esq->PR[esq->nroChaves] = pai->PR[posPai];
+    esq->nroChaves++;
+
+    // Tudo do nó direito passa para o esquerdo
+    int i;
+    for (i = 0; i < dir->nroChaves; i++) {
+        esq->C[esq->nroChaves] = dir->C[i];
+        esq->PR[esq->nroChaves] = dir->PR[i];
+        esq->P[esq->nroChaves] = dir->P[i];
+        esq->nroChaves++;
+    }
+    esq->P[esq->nroChaves] = dir->P[i]; // Último ponteiro
+
+    //  remoção do nó direito (Adiciona na pilha de removidos do Índice)
+    dir->removido = '1';
+    dir->proximo = cabecalho->topo;
+    cabecalho->topo = dirRRN;
+    escreverNoArvoreB(arqIndice, dir, dirRRN); // Salva a remoção no disco
+
+    // O pai perde a chave que desceu por meio do shift 
+    reorganizarPagina(pai, posPai);
 }
 
 void DELETE_INDEX() {

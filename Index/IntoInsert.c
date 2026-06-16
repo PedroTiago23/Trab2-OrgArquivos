@@ -78,7 +78,8 @@ void INSERT_INDEX() {
         }
 
         // Atualiza o índice
-        inserirNaArvoreB(arqIndice, &cabecalhoIndice, novoReg.codEstacao, rrnInserido);
+        int offsetInserido = 17 + rrnInserido * 80;
+        inserirNaArvoreB(arqIndice, &cabecalhoIndice, novoReg.codEstacao, offsetInserido);
 
         // limpa a memória
         liberaStringsRegistro(&novoReg);
@@ -95,5 +96,6 @@ void INSERT_INDEX() {
     fclose(arqDados);
     fclose(arqIndice);
 
+    BinarioNaTela(arqDadosNome);
     BinarioNaTela(arqIndiceNome);
 }

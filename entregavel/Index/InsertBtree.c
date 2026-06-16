@@ -126,7 +126,8 @@ int inserirRecursivo(int rrnAtual, int chave, int PonteiroRef, int* chavePromovi
     return 1; // o nó pai foi cortado com sucesso
 }
 
-
+// Primeira função a ser chamada para inserir uma dada chave na árvore-B.
+// Gerencia as chaves, referências e chamadas da função recursiva.
 void inserirNaArvoreB(FILE* arqIndice, CABECALHO_ARVOREB* cabecalho, int chave, int PonteiroRef) {
     
     // Caso a árvore esteja vazia
