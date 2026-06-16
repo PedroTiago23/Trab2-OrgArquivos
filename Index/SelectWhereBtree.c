@@ -53,8 +53,7 @@ void SELECT_INDEX()
         {
             // Pulamos diretamente pro registro com o codEstacao buscado através da árvore que retorna seu offset.
             // Se o Offset = 17 + (RRN * 80), então o RRN = (Offset - 17)/80
-            int offset = buscaChave(regBusca.codEstacao, cabecalhoIndice.noRaiz, arqIndice);
-            int rrnEncontrado = (offset - 17)/80;
+            int rrnEncontrado = buscaChave(regBusca.codEstacao, cabecalhoIndice.noRaiz, arqIndice);
             if(rrnEncontrado != -1)
             {
                 LerRegistroBin(arqDados, &regLido, rrnEncontrado);
