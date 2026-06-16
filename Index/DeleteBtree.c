@@ -164,11 +164,12 @@ int tratarUnderflow(int filhoIndice, int paiRRN, NO_ARVOREB* noPai, FILE* arqInd
             // Idem
             return 0;
         }
+        // Se nenhuma redistribuição aconteceu, temos que concatenar o filho com um de seus irmãos.
+        // Fazendo a concatenação com o irmão esquerdo, já que estamos no if() dele existir.
+        
     }
 
-    // Se nenhuma redistribuição aconteceu, temos que concatenar o filho com um de seus irmãos.
-    // Primeiro tentar concatenar com irmão à esquerda, e então à direita.
-
+    
 
 }
 
