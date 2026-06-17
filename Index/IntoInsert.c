@@ -68,14 +68,14 @@ void INSERT_INDEX() {
 
             // Atualiza os dados do cabeçalho
             cabecalhoDados.topo = proximoRRN;
-            cabecalhoDados.nroRegRemovidos--; 
-
+            
             // Sobrescreve o registro no rrnInserido com o novoReg.
             fseek(arqDados, offsetRemovido, SEEK_SET);
             EscreverRegistroBin(arqDados, &novoReg);
         }
 
         // Atualiza o índice
+        int offsetInserido = 17 + (rrnInserido * 80);
         inserirNaArvoreB(arqIndice, &cabecalhoIndice, novoReg.codEstacao, rrnInserido);
 
         // limpa a memória

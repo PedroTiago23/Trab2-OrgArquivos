@@ -54,9 +54,9 @@ void SELECT_INDEX()
             // Pulamos diretamente pro registro com o codEstacao buscado através da árvore que retorna seu offset.
             // Se o Offset = 17 + (RRN * 80), então o RRN = (Offset - 17)/80
             int offset = buscaChave(regBusca.codEstacao, cabecalhoIndice.noRaiz, arqIndice);
-            int rrnEncontrado = (offset - 17)/80;
-            if(rrnEncontrado != -1)
+            if(offset != -1)
             {
+                int rrnEncontrado = (offset - 17)/80;
                 LerRegistroBin(arqDados, &regLido, rrnEncontrado);
 
                 if(ComparaRegistros(&regBusca, &regLido) && regLido.removido == '0')
@@ -65,10 +65,14 @@ void SELECT_INDEX()
                     existe_um = true;
                 }
 
-                regLido.nomeEstacao = NULL;
-                regLido.nomeLinha = NULL;
-                if(regLido.nomeEstacao) free(regLido.nomeEstacao);
-                if(regLido.nomeLinha) free(regLido.nomeLinha);
+                // Libera PRIMEIRO, anula DEPOIS
+                if(regLido.nomeEstacao) {
+                    free(regLido.nomeEstacao);
+                    regLido.nomeEstacao = NULL;
+                }
+                if(regLido.nomeLinha) {
+                    free(regLido.nomeLinha);
+                    regLido.nomeLinha = NULL;
             }
         }
 

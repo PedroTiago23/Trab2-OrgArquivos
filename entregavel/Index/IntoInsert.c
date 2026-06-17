@@ -54,32 +54,28 @@ void INSERT_INDEX() {
             
             cabecalhoDados.proxRRN++;
         } else {
-            
             rrnInserido = cabecalhoDados.topo;
             
-            // Calcula o byte  onde o registro removido começa no arquivo de dados
+            // Calcula o byte onde o registro removido começa
             long offsetRemovido = 17 + (rrnInserido * 80);
             fseek(arqDados, offsetRemovido, SEEK_SET);
 
-            // Ler o  RRN removido que estava salvo lá.
+            // Ler o RRN removido que estava salvo lá.
             char statusRemovido;
-            fread(&statusRemovido, sizeof(char), 1, arqDados); 
-            
+            fread(&statusRemovido, sizeof(char), 1, arqDados);
             int proximoRRN;
             fread(&proximoRRN, sizeof(int), 1, arqDados);
 
-            //  Atualiza o cabecalhoDados.topo com esse valor.
+            // Atualiza os dados do cabeçalho
             cabecalhoDados.topo = proximoRRN;
-
+            
             // Sobrescreve o registro no rrnInserido com o novoReg.
             fseek(arqDados, offsetRemovido, SEEK_SET);
-
             EscreverRegistroBin(arqDados, &novoReg);
         }
 
         // Atualiza o índice
-        int offsetInserido = 17 + rrnInserido * 80;
-        inserirNaArvoreB(arqIndice, &cabecalhoIndice, novoReg.codEstacao, offsetInserido);
+        inserirNaArvoreB(arqIndice, &cabecalhoIndice, novoReg.codEstacao, rrnInserido);
 
         // limpa a memória
         liberaStringsRegistro(&novoReg);

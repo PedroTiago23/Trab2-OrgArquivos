@@ -361,9 +361,10 @@ void DELETE_INDEX() {
         initRegBusca(&regBusca, qtdCampos);
 
         if (regBusca.codEstacao != -2) {
-            int rrnEncontrado = buscaChave(regBusca.codEstacao, cabecalhoIndice.noRaiz, arqIndice);
+            int offsetEncontrado = buscaChave(regBusca.codEstacao, cabecalhoIndice.noRaiz, arqIndice);
 
-            if (rrnEncontrado != -1) {
+            if (offsetEncontrado != -1) {
+                int rrnEncontrado = (offsetEncontrado - 17)/80;
                 LerRegistroBin(arqDados, &regLido, rrnEncontrado);
 
                 if (ComparaRegistros(&regBusca, &regLido) && regLido.removido == '0') {
