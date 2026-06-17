@@ -409,3 +409,4 @@ void DELETE_INDEX() {
     
     BinarioNaTela(arqDadosNome);
     BinarioNaTela(arqIndiceNome);
+}

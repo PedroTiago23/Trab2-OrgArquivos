@@ -31,7 +31,7 @@ void redistribuirUniformemente(NO_ARVOREB* noPai, int indicePai, NO_ARVOREB* fil
     int qtdDir = contarChaves(filhoDir);
     int qtdTotal = qtdEsq + qtdDir + 1;
 
-    // Agruparemos todas as chaves com referências aqui e então distribuíremos.
+    // agrupa todas as chaves com referências para depois distribuir.
     int Cs[ORDEM_ARVORE * 2];
     int PRs[ORDEM_ARVORE * 2];
     int Ps[ORDEM_ARVORE * 2 + 1];
@@ -272,14 +272,28 @@ void removerChaveArvore(int chave, FILE* arqIndice, CABECALHO_ARVOREB* cabecalho
     // Se a raiz ficou vazia após a remoção e ela não é uma folha, a árvore diminui de altura
     if (status == 1) {
         NO_ARVOREB raizAtual;
-        lerRegistroIndice(&raizAtual, cabecalhoIndice->noRaiz, arqIndice);
+        int raizAntigaRRN = cabecalhoIndice->noRaiz; // Guarda o RRN da raiz que será removida
+        lerRegistroIndice(&raizAtual, raizAntigaRRN, arqIndice);
         
         if (raizAtual.nroChaves == 0 && raizAtual.tipoNo != -1) {
             // O novo RRN da raiz agora é o único filho que sobrou
             cabecalhoIndice->noRaiz = raizAtual.P[0]; 
+            
+            // Coloca a antiga raiz na pilha do topo, no disco
+            raizAtual.removido = '1';
+            raizAtual.proximo = cabecalhoIndice->topo;
+            cabecalhoIndice->topo = raizAntigaRRN;
+            escreverNoArvoreB(arqIndice, &raizAtual, raizAntigaRRN);
+            
         } else if (raizAtual.nroChaves == 0 && raizAtual.tipoNo == -1) {
-            // A árvore está completamente vazia
+            // A árvore está toda vazia
             cabecalhoIndice->noRaiz = -1;
+            
+            // reutiliza a última folha que sobrou e esvazia
+            raizAtual.removido = '1';
+            raizAtual.proximo = cabecalhoIndice->topo;
+            cabecalhoIndice->topo = raizAntigaRRN;
+            escreverNoArvoreB(arqIndice, &raizAtual, raizAntigaRRN);
         }
     }
 }
@@ -393,5 +407,6 @@ void DELETE_INDEX() {
     fclose(arqDados);
     fclose(arqIndice);
     
+    BinarioNaTela(arqDadosNome);
     BinarioNaTela(arqIndiceNome);
 }
