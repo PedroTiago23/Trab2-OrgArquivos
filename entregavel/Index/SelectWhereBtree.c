@@ -75,7 +75,7 @@ void SELECT_INDEX()
                     regLido.nomeLinha = NULL;
                 }   
             }   
-
+        }
         else while(RRN < cabecalho.proxRRN)
         {
             BuscaRegistro(arqDados, &cabecalho, &regBusca, &regLido, &RRN);   
@@ -104,4 +104,3 @@ void SELECT_INDEX()
     fclose(arqDados);
     fclose(arqIndice);
 }   
-}

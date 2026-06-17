@@ -6,6 +6,22 @@ Pedro Tiago Biffi - 16827777
 
 #include "InsertBtree.h"
 
+// Função para realizar a reutilização de páginas da árvore-B logicamente removidas.
+int alocarNovoNoArvore(FILE* arqIndice, CABECALHO_ARVOREB* cabecalho) {
+    int rrnLivre;
+    if (cabecalho->topo != -1) {
+        rrnLivre = cabecalho->topo;
+        NO_ARVOREB paginaRemovida;
+        lerRegistroIndice(&paginaRemovida, rrnLivre, arqIndice);
+        cabecalho->topo = paginaRemovida.proximo;
+    } else {
+        rrnLivre = cabecalho->proxRRN;
+        cabecalho->proxRRN++;
+    }
+    cabecalho->nroNos++;
+    return rrnLivre;
+}
+
 int inserirRecursivo(int rrnAtual, int chave, int PonteiroRef, int* chavePromovida, int* PonteiroRefPromovido, int* rrnFilhoDireito, FILE* arqIndice, CABECALHO_ARVOREB* cabecalho) {
     
     if (rrnAtual == -1) {
@@ -93,8 +109,18 @@ int inserirRecursivo(int rrnAtual, int chave, int PonteiroRef, int* chavePromovi
         }
     }
 
+    int novoTipo = paginaAtual.tipoNo;
+    
+    // Se a página que está rachando é 0, os filhos não podem ser 0.
+    if (novoTipo == 0) { 
+        if (P_temp[0] == -1) 
+            novoTipo = -1;  // Se a raiz não tem filhos, as metades nascem como folhas.
+        else 
+            novoTipo = 1;   // Se a raiz tem filhos, as metades nascem como intermediários.
+    }
+
     // Atualiza a página atual (Nó Esquerdo)
-    NO_ARVOREB esq = criarNoVazio(paginaAtual.tipoNo);
+    NO_ARVOREB esq = criarNoVazio(novoTipo);
     esq.C[0] = ChaveTemp[0]; 
     esq.PR[0] = PonteiroRefTemp[0];
     esq.C[1] = ChaveTemp[1]; 
@@ -103,25 +129,21 @@ int inserirRecursivo(int rrnAtual, int chave, int PonteiroRef, int* chavePromovi
     esq.P[2] = P_temp[2];
     esq.nroChaves = 2;
 
-  
     *chavePromovida = ChaveTemp[2];
     *PonteiroRefPromovido = PonteiroRefTemp[2];
 
     // Cria a Nova Página (Nó Direito)
-    NO_ARVOREB dir = criarNoVazio(paginaAtual.tipoNo);
+    NO_ARVOREB dir = criarNoVazio(novoTipo);
     dir.C[0] = ChaveTemp[3]; 
     dir.PR[0] = PonteiroRefTemp[3];
     dir.P[0] = P_temp[3]; 
     dir.P[1] = P_temp[4];
     dir.nroChaves = 1;
-    *rrnFilhoDireito = cabecalho->proxRRN; // Pega o RRN vazio disponível
+    *rrnFilhoDireito = alocarNovoNoArvore(arqIndice, cabecalho); // Pega o RRN vazio disponível
 
     // Escreve as alterações
     escreverNoArvoreB(arqIndice, &esq, rrnAtual);
     escreverNoArvoreB(arqIndice, &dir, *rrnFilhoDireito);
-    
-    cabecalho->proxRRN++;
-    cabecalho->nroNos++;
 
     return 1; // o nó pai foi cortado com sucesso
 }
@@ -132,17 +154,15 @@ void inserirNaArvoreB(FILE* arqIndice, CABECALHO_ARVOREB* cabecalho, int chave, 
     
     // Caso a árvore esteja vazia
     if (cabecalho->nroNos == 0) {
-        NO_ARVOREB novaRaiz = criarNoVazio(-1); // -1 = Nó folha
+        NO_ARVOREB novaRaiz = criarNoVazio(0); // -1 = Nó folha
         novaRaiz.C[0] = chave;
         novaRaiz.PR[0] = PonteiroRef;
         novaRaiz.nroChaves = 1;
         
-        int rrnNovaRaiz = cabecalho->proxRRN;
+        int rrnNovaRaiz = alocarNovoNoArvore(arqIndice, cabecalho);
         escreverNoArvoreB(arqIndice, &novaRaiz, rrnNovaRaiz);
         
         cabecalho->noRaiz = rrnNovaRaiz;
-        cabecalho->proxRRN++;
-        cabecalho->nroNos++;
         return;
     }
 
@@ -163,11 +183,9 @@ void inserirNaArvoreB(FILE* arqIndice, CABECALHO_ARVOREB* cabecalho, int chave, 
         novaRaiz.P[1] = rrnFilhoDireito;
         novaRaiz.nroChaves = 1;
         
-        int rrnNovaRaiz = cabecalho->proxRRN;
+        int rrnNovaRaiz = alocarNovoNoArvore(arqIndice, cabecalho);
         escreverNoArvoreB(arqIndice, &novaRaiz, rrnNovaRaiz);
         
         cabecalho->noRaiz = rrnNovaRaiz;
-        cabecalho->proxRRN++;
-        cabecalho->nroNos++;
     }
 }

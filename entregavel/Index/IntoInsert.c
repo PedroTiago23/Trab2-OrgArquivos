@@ -76,7 +76,7 @@ void INSERT_INDEX() {
 
         // Atualiza o índice
         int offsetInserido = 17 + (rrnInserido * 80);
-        inserirNaArvoreB(arqIndice, &cabecalhoIndice, novoReg.codEstacao, rrnInserido);
+        inserirNaArvoreB(arqIndice, &cabecalhoIndice, novoReg.codEstacao, offsetInserido);
 
         // limpa a memória
         liberaStringsRegistro(&novoReg);
