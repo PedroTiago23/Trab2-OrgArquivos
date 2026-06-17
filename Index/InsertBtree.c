@@ -93,8 +93,18 @@ int inserirRecursivo(int rrnAtual, int chave, int PonteiroRef, int* chavePromovi
         }
     }
 
+    int novoTipo = paginaAtual.tipoNo;
+    
+    // Se a página que está rachando é 0, os filhos não podem ser 0.
+    if (novoTipo == 0) { 
+        if (P_temp[0] == -1) 
+            novoTipo = -1;  // Se a raiz não tem filhos, as metades nascem como folhas.
+        else 
+            novoTipo = 1;   // Se a raiz tem filhos, as metades nascem como intermediários.
+    }
+
     // Atualiza a página atual (Nó Esquerdo)
-    NO_ARVOREB esq = criarNoVazio(paginaAtual.tipoNo);
+    NO_ARVOREB esq = criarNoVazio(novoTipo);
     esq.C[0] = ChaveTemp[0]; 
     esq.PR[0] = PonteiroRefTemp[0];
     esq.C[1] = ChaveTemp[1]; 
@@ -103,12 +113,11 @@ int inserirRecursivo(int rrnAtual, int chave, int PonteiroRef, int* chavePromovi
     esq.P[2] = P_temp[2];
     esq.nroChaves = 2;
 
-  
     *chavePromovida = ChaveTemp[2];
     *PonteiroRefPromovido = PonteiroRefTemp[2];
 
     // Cria a Nova Página (Nó Direito)
-    NO_ARVOREB dir = criarNoVazio(paginaAtual.tipoNo);
+    NO_ARVOREB dir = criarNoVazio(novoTipo);
     dir.C[0] = ChaveTemp[3]; 
     dir.PR[0] = PonteiroRefTemp[3];
     dir.P[0] = P_temp[3]; 
@@ -132,7 +141,7 @@ void inserirNaArvoreB(FILE* arqIndice, CABECALHO_ARVOREB* cabecalho, int chave, 
     
     // Caso a árvore esteja vazia
     if (cabecalho->nroNos == 0) {
-        NO_ARVOREB novaRaiz = criarNoVazio(-1); // -1 = Nó folha
+        NO_ARVOREB novaRaiz = criarNoVazio(0); // -1 = Nó folha
         novaRaiz.C[0] = chave;
         novaRaiz.PR[0] = PonteiroRef;
         novaRaiz.nroChaves = 1;

@@ -213,7 +213,7 @@ int removerRecursivo(int chave, int noRRN, FILE* arqIndice, CABECALHO_ARVOREB* c
     // Achou a chave na página atual
     if (i < paginaAtual.nroChaves && paginaAtual.C[i] == chave) {
         
-        if (paginaAtual.tipoNo == -1) {
+        if (paginaAtual.P[0] == -1) {
             // caso seja uma folha
             reorganizarPagina(&paginaAtual, i);
             escreverNoArvoreB(arqIndice, &paginaAtual, noRRN);
@@ -275,9 +275,15 @@ void removerChaveArvore(int chave, FILE* arqIndice, CABECALHO_ARVOREB* cabecalho
         int raizAntigaRRN = cabecalhoIndice->noRaiz; // Guarda o RRN da raiz que será removida
         lerRegistroIndice(&raizAtual, raizAntigaRRN, arqIndice);
         
-        if (raizAtual.nroChaves == 0 && raizAtual.tipoNo != -1) {
+        if (raizAtual.nroChaves == 0 && raizAtual.P[0] != -1) {
             // O novo RRN da raiz agora é o único filho que sobrou
-            cabecalhoIndice->noRaiz = raizAtual.P[0]; 
+            int novoRaizRRN = raizAtual.P[0];
+            cabecalhoIndice->noRaiz = novoRaizRRN; 
+            // Puxa o filho do disco e muda o tipo dele para 0
+            NO_ARVOREB novaRaiz;
+            lerRegistroIndice(&novaRaiz, novoRaizRRN, arqIndice);
+            novaRaiz.tipoNo = 0;
+            escreverNoArvoreB(arqIndice, &novaRaiz, novoRaizRRN);
             
             // Coloca a antiga raiz na pilha do topo, no disco
             raizAtual.removido = '1';

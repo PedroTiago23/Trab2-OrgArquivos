@@ -46,7 +46,7 @@ void CREATE_INDEX()
         if (reg.removido == '0')
         {
             int byteOffset = 17 + (rrnDados * 80);
-            inserirNaArvoreB(arqIndice, &cabecalhoTree, reg.codEstacao, rrnDados);
+            inserirNaArvoreB(arqIndice, &cabecalhoTree, reg.codEstacao, byteOffset);
         }
         liberaStringsRegistro(&reg); // Para não dar memory leak.
         rrnDados++;
