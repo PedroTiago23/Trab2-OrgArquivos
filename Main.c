@@ -63,8 +63,23 @@ int main(){
         case 10:
             DELETE_INDEX();
             break;
+        case 11:
+            break;
+        case 12:
+            break;
+        case 13:
+            break;
+        case 14:
+            break;
         default:
             printf("Entrada inválida!");
             break;
     }
 }
+
+/*
+11 arquivoEntrada1.bin nomeCampo1 arquivoEntrada2.bin nomeCampo2
+12 arquivoEntrada1.bin nomeCampo1 arquivoEntrada2.bin nomeCampo2 indiceArquivoEntrada2.bin
+13 arquivoEntrada.bin campoOrdenacao arquivoOrdenado.bin
+14 arquivoEntrada1.bin nomeCampo1 arquivoEntrada2.bin nomeCampo2
+*/
