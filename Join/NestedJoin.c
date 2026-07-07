@@ -36,21 +36,20 @@ void NESTED_JOIN()
         return;
     }
 
-    REGISTRO registroArq1;
-    REGISTRO registroArq2;
+    REGISTRO registroArq1, registroArq2;
     bool existe_um = false;
     for(int i = 0; i < cabecalho.proxRRN; i++)
     {
         LerRegistroBin(arq1, &registroArq1, i);
         // Ignoramos registros que estiverem removidos ou que tiverem codProxEst nulo.
         if(registroArq1.removido == '1' || registroArq1.codProxEstacao == -1)
-            break;
+            continue;
 
         for(int j = 0; j < cabecalho.proxRRN; j++)
         {
             LerRegistroBin(arq2, &registroArq2, j);
             if(registroArq2.removido == '1')    // Dispensa verificação já que codEstacao nunca será nulo.
-                break;
+                continue;
 
             if(registroArq1.codProxEstacao == registroArq2.codEstacao)
             {

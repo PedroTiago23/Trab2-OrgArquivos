@@ -39,6 +39,21 @@ void INDEXED_JOIN()
         return;
     }
 
+    REGISTRO registroArq1, registroArq2;
+    for(int i = 0; i < cabecalho.proxRRN; i++)
+    {
+        LerRegistroBin(arq1, &registroArq1, i);
+        if(registroArq1.removido == '1' || registroArq1.codProxEstacao == -1)
+            continue;
+  
+        int proxEstOffset = buscaChave(registroArq1.codProxEstacao, cabecalhoBTree.noRaiz, arq2);
+        if(proxEstOffset == -1)
+            continue;   // Não existe registro com tal codEstacao na árvore-B.
+        int proxEstRRN = (proxEstOffset - 17)/80;
+        LerRegistroBin(arq2, &registroArq2, proxEstRRN);
+
+        liberaStringsRegistro(&registroArq1);
+    }
 
     return;
 }
