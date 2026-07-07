@@ -26,6 +26,9 @@ Pedro Tiago Biffi - 16827777
 #include "Index/IntoInsert.h"
 #include "Index/DeleteBtree.h"
 
+// Arquivo de definição das funções e funcionalidades do Trabalho 2
+#include "Join/JoinHeaders.h";
+
 int main(){
     // Lendo entrada de qual será a funcionalidade executada
     int comando;
@@ -64,15 +67,19 @@ int main(){
             DELETE_INDEX();
             break;
         case 11:
+            NESTED_JOIN();
             break;
         case 12:
+            INDEXED_JOIN();
             break;
         case 13:
+            ORDER_BY();
             break;
         case 14:
+            MERGE_JOIN();
             break;
         default:
-            printf("Entrada inválida!");
+            printf("Entrada inválida!\n");
             break;
     }
 }

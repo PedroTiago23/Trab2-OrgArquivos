@@ -5,6 +5,11 @@
 #include "../Estruturas.h"
 #include "../LogicaBusca.h"
 
+void NESTED_JOIN();
+void INDEXED_JOIN();
+void ORDER_BY();
+void MERGE_JOIN();
+
 
 
 #endif
