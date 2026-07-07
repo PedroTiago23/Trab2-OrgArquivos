@@ -39,6 +39,7 @@ void INDEXED_JOIN()
         return;
     }
 
+    bool existe_um = false; // Flag para reportarmos "Registro inexistente" ou não.
     REGISTRO registroArq1, registroArq2;
     for(int i = 0; i < cabecalho.proxRRN; i++)
     {
@@ -46,14 +47,31 @@ void INDEXED_JOIN()
         if(registroArq1.removido == '1' || registroArq1.codProxEstacao == -1)
             continue;
   
-        int proxEstOffset = buscaChave(registroArq1.codProxEstacao, cabecalhoBTree.noRaiz, arq2);
+        int proxEstOffset = buscaChave(registroArq1.codProxEstacao, cabecalhoBTree.noRaiz, arq2arv);
         if(proxEstOffset == -1)
-            continue;   // Não existe registro com tal codEstacao na árvore-B.
+            continue;   // Não existe registro com tal codEstacao na árvore-B do arq2.
         int proxEstRRN = (proxEstOffset - 17)/80;
+
         LerRegistroBin(arq2, &registroArq2, proxEstRRN);
+        if(registroArq2.removido == '1')    // Na teoria buscaChave() pode retornar um reg removido.
+            continue;
+        
+        if(registroArq1.codProxEstacao == registroArq2.codEstacao)  // Verificação necessária? Acho que não mas depois removemos.
+        {
+            printf("%d %s %s %d %s\n", registroArq1.codEstacao, registroArq1.nomeEstacao, registroArq1.nomeLinha, registroArq2.codEstacao, registroArq2.nomeEstacao);
+            existe_um = true;
+        }
 
         liberaStringsRegistro(&registroArq1);
+        liberaStringsRegistro(&registroArq2);
     }
+
+    if(!existe_um)
+        printf("Registro inexistente.\n");
+
+    fclose(arq1);
+    fclose(arq2);
+    fclose(arq2arv);
 
     return;
 }
