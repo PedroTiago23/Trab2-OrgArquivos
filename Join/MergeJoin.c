@@ -6,55 +6,6 @@ Pedro Tiago Biffi - 16827777
 
 #include "JoinHeaders.h"
 
-// Função usada pelo qsort para comparar a próxima estação
-int compara_merge_codProxEst(const void *a, const void *b) {
-    const REGISTRO *r1 = (const REGISTRO *)a; // o qsort precisa que seja const
-    const REGISTRO *r2 = (const REGISTRO *)b;
-
-    // Se os registros tiverem campos nulos
-    // serão considerados iguais
-    if (r1->codProxEstacao == -1 && r2->codProxEstacao == -1) {
-        return 0;
-    }
-
-    // retorna 1 quando o codproxEstacao do arquivo 1 é nulo
-    if (r1->codProxEstacao == -1) {
-        return 1;
-    }
-    
-    // retorna -1 quando o codproxEstacao do arquivo 2 é nulo
-    if (r2->codProxEstacao == -1) {
-        return -1;
-    }
-
-    // Caso ambos os codProxEstacao sejam válidos, subtraimos eles 
-    // Com base na implementação do qsort:
-    // Se o resultado for negativo, o qsort vai ordenar o r1 antes do r2
-    // Se for positivo, o r2 vem antes do r1
-    // Se der 0, vão ser equivalentes
-    return r1->codProxEstacao - r2->codProxEstacao;
-}
-
-// Função usada pelo qsort para comparar a estação atual
-int compara_merge_codEst(const void *a,const void *b) {
-    const REGISTRO *r1 = (const REGISTRO *)a; 
-    const REGISTRO *r2 = (const REGISTRO *)b;
-
-    // Mesma lógica da função anterior, mas para o codEstacao
-    if (r1->codEstacao == -1 && r2->codEstacao == -1) {
-        return 0;
-    }
-
-    if (r1->codEstacao == -1) {
-        return 1;
-    }
-    
-    if (r2->codEstacao == -1) {
-        return -1;
-    }
-
-    return r1->codEstacao - r2->codEstacao;
-}
 
 void MERGE_JOIN() {
     char nomeArq1[32];
@@ -145,8 +96,8 @@ void MERGE_JOIN() {
 
     // Ordena ambos os vetores, o arquivo1 é ordenado pelo codProxEstacao
     // o arquivo2 é ordenado pelo codEstacao
-    qsort(vetor1, qtd1, sizeof(REGISTRO), compara_merge_codProxEst);
-    qsort(vetor2, qtd2, sizeof(REGISTRO), compara_merge_codEst);
+    qsort(vetor1, qtd1, sizeof(REGISTRO), compara_codProxEstacao);
+    qsort(vetor2, qtd2, sizeof(REGISTRO), compara_codEstacao);
 
     // Definindo e inicializando as variaveis que representam os ponteiros 
     // dos arquivos 1 e 2, além da flag existe_um, que verifica se 
