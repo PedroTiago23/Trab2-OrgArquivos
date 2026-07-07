@@ -11,7 +11,7 @@ void INDEXED_JOIN()
     char nomeArq1[32], nomeCampo1[32], nomeArq2[32], nomeCampo2[32], nomeArq2BTree[32];
     scanf("%s %s %s %s %s", nomeArq1, nomeCampo1, nomeArq2, nomeCampo2, nomeArq2BTree);
 
-    if(strcmp(nomeCampo1, "codProxEst") || strcmp(nomeCampo2, "codEstacao"))
+    if(strcmp(nomeCampo1, "codProxEstacao") || strcmp(nomeCampo2, "codEstacao"))
     {
         printf("Falha no processamento do arquivo.\n");
         return;
@@ -35,7 +35,7 @@ void INDEXED_JOIN()
 
     if(cabecalho.status == '0' || cabecalhoBTree.status == '0')
     {
-        printf("Arquivos inconsistente.");
+        printf("Falha no processamento do arquivo.");
         return;
     }
 
@@ -45,8 +45,10 @@ void INDEXED_JOIN()
     {
         LerRegistroBin(arq1, &registroArq1, i);
         if(registroArq1.removido == '1' || registroArq1.codProxEstacao == -1)
+        {
+            liberaStringsRegistro(&registroArq1);
             continue;
-  
+        }
         int proxEstOffset = buscaChave(registroArq1.codProxEstacao, cabecalhoBTree.noRaiz, arq2arv);
         if(proxEstOffset == -1)
             continue;   // Não existe registro com tal codEstacao na árvore-B do arq2.
@@ -54,8 +56,10 @@ void INDEXED_JOIN()
 
         LerRegistroBin(arq2, &registroArq2, proxEstRRN);
         if(registroArq2.removido == '1')    // Na teoria buscaChave() pode retornar um reg removido.
+        {
+            liberaStringsRegistro(&registroArq2);
             continue;
-        
+        }
         if(registroArq1.codProxEstacao == registroArq2.codEstacao)  // Verificação necessária? Acho que não mas depois removemos.
         {
             printf("%d %s %s %d %s\n", registroArq1.codEstacao, registroArq1.nomeEstacao, registroArq1.nomeLinha, registroArq2.codEstacao, registroArq2.nomeEstacao);

@@ -1,5 +1,5 @@
 all:
-	gcc -o project_main *.c Dados/*.c Index/*.c
+	gcc -o project_main *.c Dados/*.c Index/*.c Join/*.c
 
 run:
 	./project_main

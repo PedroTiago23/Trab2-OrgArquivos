@@ -11,7 +11,7 @@ void NESTED_JOIN()
     char nomeArq1[32], nomeCampo1[32], nomeArq2[32], nomeCampo2[32];
     scanf("%s %s %s %s", nomeArq1, nomeCampo1, nomeArq2, nomeCampo2);
 
-    if(strcmp(nomeCampo1, "codProxEst") || strcmp(nomeCampo2, "codEstacao"))
+    if(strcmp(nomeCampo1, "codProxEstacao") || strcmp(nomeCampo2, "codEstacao"))
     {
         printf("Falha no processamento do arquivo.\n");
         return;
@@ -32,7 +32,7 @@ void NESTED_JOIN()
 
     if(cabecalho.status == '0')
     {
-        printf("Arquivos inconsistente.");
+        printf("Falha no processamento do arquivo.");
         return;
     }
 
@@ -43,13 +43,19 @@ void NESTED_JOIN()
         LerRegistroBin(arq1, &registroArq1, i);
         // Ignoramos registros que estiverem removidos ou que tiverem codProxEst nulo.
         if(registroArq1.removido == '1' || registroArq1.codProxEstacao == -1)
+        {
+            liberaStringsRegistro(&registroArq1);   
             continue;
+        }
 
         for(int j = 0; j < cabecalho.proxRRN; j++)
         {
             LerRegistroBin(arq2, &registroArq2, j);
             if(registroArq2.removido == '1')    // Dispensa verificação já que codEstacao nunca será nulo.
+            {
+                liberaStringsRegistro(&registroArq2);
                 continue;
+            }
 
             if(registroArq1.codProxEstacao == registroArq2.codEstacao)
             {

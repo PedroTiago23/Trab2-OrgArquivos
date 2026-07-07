@@ -27,7 +27,7 @@ Pedro Tiago Biffi - 16827777
 #include "Index/DeleteBtree.h"
 
 // Arquivo de definição das funções e funcionalidades do Trabalho 2
-#include "Join/JoinHeaders.h";
+#include "Join/JoinHeaders.h"
 
 int main(){
     // Lendo entrada de qual será a funcionalidade executada
