@@ -57,41 +57,13 @@ void MERGE_JOIN() {
 
     // define o vetor1 para o arquivo1 e carrega na memória o vetor 
     // de registros lidos que não são logicamente removidos ou nulos
-    REGISTRO *vetor1 = malloc(cab1.proxRRN * sizeof(REGISTRO));
-    // quantidade de registros validos que foram lidos
-    int qtd1 = 0;
-    
-    for (int i = 0; i < cab1.proxRRN; i++) {
-        REGISTRO reg;
-        LerRegistroBin(arq1, &reg, i);
-        
-        //  só será guardado registros não removidos e com o campo válido
-        if (reg.removido == '0' && reg.codProxEstacao != -1) {
-            vetor1[qtd1] = reg;
-            qtd1++;
-        } else {
-            // se o registro for nulo ou removido, apenas libera a memoria dele 
-            // e não entra no vetor
-            liberaStringsRegistro(&reg);
-        }
-    }
+    REGISTRO *vetor1;
+    int qtd1 = popularVetorRegistros(&vetor1, arq1);
     fclose(arq1);
 
     // Mesma lógica do vetor1, mas agora para o arquivo2
-    REGISTRO *vetor2 = malloc(cab2.proxRRN * sizeof(REGISTRO));
-    int qtd2 = 0;
-    
-    for (int i = 0; i < cab2.proxRRN; i++) {
-        REGISTRO reg;
-        LerRegistroBin(arq2, &reg, i);
-        
-        if (reg.removido == '0' && reg.codEstacao != -1) { 
-            vetor2[qtd2] = reg;
-            qtd2++;
-        } else {
-            liberaStringsRegistro(&reg);
-        }
-    }
+    REGISTRO *vetor2;
+    int qtd2 = popularVetorRegistros(&vetor2, arq2);
     fclose(arq2);
 
     // Ordena ambos os vetores, o arquivo1 é ordenado pelo codProxEstacao

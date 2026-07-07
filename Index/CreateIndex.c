@@ -4,7 +4,7 @@ Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */
 
-#include "CreateIndex.h"
+#include "BTree.h"
 
 // Trecho principal para a funcionalidade de criar um arquivo de índice para
 // o arquivo de dados do trabalho introdutório. 

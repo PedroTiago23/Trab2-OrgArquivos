@@ -15,4 +15,6 @@ int compara_codEstacao(const void *a, const void *b);
 
 int compara_codProxEstacao(const void *a, const void *b);
 
+int popularVetorRegistros(REGISTRO** vetor, FILE* arq);
+
 #endif

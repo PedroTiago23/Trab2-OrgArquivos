@@ -48,6 +48,30 @@ int compara_codProxEstacao(const void *a, const void *b) {
     return r1->codProxEstacao - r2->codProxEstacao;
 }
 
+// Recebe uma lista dinâmica que será populada com registros de um arq especificado.
+// Retorna qtd de registros válidos da nova lista.
+int popularVetorRegistros(REGISTRO** vetor, FILE* arq)
+{
+    CABECALHO cab;
+    lerCabecalhoBin(arq, &cab);
+    *vetor = malloc(cab.proxRRN * sizeof(REGISTRO));
+    int qtdValidos = 0;
+    
+    for (int i = 0; i < cab.proxRRN; i++) {
+        REGISTRO reg;
+        LerRegistroBin(arq, &reg, i);
+        
+        if (reg.removido == '0') {
+            (*vetor)[qtdValidos] = reg; 
+            qtdValidos++;
+        } else {
+            // Se removido, limpamos memória das strings
+            liberaStringsRegistro(&reg); 
+        }
+    }
+    return qtdValidos;
+}
+
 void ORDER_BY()
 {
     char arqEntradaNome[32];
@@ -82,21 +106,8 @@ void ORDER_BY()
 
     // Define o array de ordenação e joga os valores lidos do disco para a RAM
     // Só são válidos registros que não foram logicamente removidos
-    REGISTRO *vetorOrdenacao = malloc(cab.proxRRN * sizeof(REGISTRO));
-    int qtdValidos = 0;
-    
-    for (int i = 0; i < cab.proxRRN; i++) {
-        REGISTRO reg;
-        LerRegistroBin(arqEntrada, &reg, i);
-        
-        if (reg.removido == '0') {
-            vetorOrdenacao[qtdValidos] = reg; 
-            qtdValidos++;
-        } else {
-            // Se removido, limpamos memória das strings
-            liberaStringsRegistro(&reg); 
-        }
-    }
+    REGISTRO *vetorOrdenacao;
+    int qtdValidos = popularVetorRegistros(&vetorOrdenacao, arqEntrada);
     fclose(arqEntrada);
 
     // ordenando conforme o campo escolhido usando o quicksort da biblioteca stdlib

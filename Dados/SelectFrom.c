@@ -4,7 +4,7 @@ Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */
 
-#include "SelectFrom.h"
+#include "Tables.h"
 
 // Trecho principal da funcionalidade de Select From,
 // onde todos os registros de um arquivo são impressos

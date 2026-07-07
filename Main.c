@@ -13,18 +13,10 @@ Pedro Tiago Biffi - 16827777
 #include "LogicaBusca.h"
 
 // Arquivos de cada uma das 6 funcionalidades do Trabalho introdutório
-#include "Dados/CreateTable.h"
-#include "Dados/SelectFrom.h"
-#include "Dados/SelectWhere.h"
-#include "Dados/Delete.h"
-#include "Dados/Insert.h"
-#include "Dados/Update.h"
+#include "Dados/Tables.h"
 
 // Arquivos de cada uma das 4 funcionalidades do Trabalho 1
-#include "Index/CreateIndex.h"
-#include "Index/SelectWhereBtree.h"
-#include "Index/IntoInsert.h"
-#include "Index/DeleteBtree.h"
+#include "Index/BTree.h"
 
 // Arquivo de definição das funções e funcionalidades do Trabalho 2
 #include "Join/JoinHeaders.h"

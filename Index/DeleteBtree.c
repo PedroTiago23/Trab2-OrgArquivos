@@ -5,7 +5,7 @@ Pedro Tiago Biffi - 16827777
 */
 
 
-#include "DeleteBtree.h"
+#include "BTree.h"
 
 // Usada para avaliar se uma página está abaixo do mínimo de chaves 
 int contarChaves(NO_ARVOREB* pagina) 

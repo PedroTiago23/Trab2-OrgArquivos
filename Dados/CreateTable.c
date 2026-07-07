@@ -4,7 +4,7 @@ Bruno Dias de Campos Filho - 16832658
 Pedro Tiago Biffi - 16827777
 */
 
-#include "CreateTable.h"
+#include "Tables.h"
 
 // Função usada para ler um único campo de inteiro no arquivo .csv
 void lerIntCSV(int* campoRegistro, char** separationPtr)
