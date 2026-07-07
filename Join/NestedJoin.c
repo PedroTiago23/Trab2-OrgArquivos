@@ -27,10 +27,46 @@ void NESTED_JOIN()
     }
 
     // Como sabemos pela especificação, ambos arquivos serão o mesmo, logo mesmo cabecalho, dispensa outra leitura.
-    CABECALHO cabecalhoArquivo;
-    lerCabecalhoBin(arq1, &cabecalhoArquivo);
+    CABECALHO cabecalho;
+    lerCabecalhoBin(arq1, &cabecalho);
 
-    
+    if(cabecalho.status == '0')
+    {
+        printf("Arquivos inconsistente.");
+        return;
+    }
+
+    REGISTRO registroArq1;
+    REGISTRO registroArq2;
+    bool existe_um = false;
+    for(int i = 0; i < cabecalho.proxRRN; i++)
+    {
+        LerRegistroBin(arq1, &registroArq1, i);
+        // Ignoramos registros que estiverem removidos ou que tiverem codProxEst nulo.
+        if(registroArq1.removido == '1' || registroArq1.codProxEstacao == -1)
+            break;
+
+        for(int j = 0; j < cabecalho.proxRRN; j++)
+        {
+            LerRegistroBin(arq2, &registroArq2, j);
+            if(registroArq2.removido == '1')    // Dispensa verificação já que codEstacao nunca será nulo.
+                break;
+
+            if(registroArq1.codProxEstacao == registroArq2.codEstacao)
+            {
+                printf("%d %s %s %d %s\n", registroArq1.codEstacao, registroArq1.nomeEstacao, registroArq1.nomeLinha, registroArq2.codEstacao, registroArq2.nomeEstacao);
+                existe_um = true;
+            }
+            liberaStringsRegistro(&registroArq2);
+        }
+        liberaStringsRegistro(&registroArq1);
+    }
+
+    if(!existe_um)
+        printf("Registro inexistente.\n");
+
+    fclose(arq1);
+    fclose(arq2);
 
     return;
 }
