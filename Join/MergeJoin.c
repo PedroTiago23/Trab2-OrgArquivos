@@ -8,8 +8,8 @@ Pedro Tiago Biffi - 16827777
 
 // Função usada pelo qsort para comparar a próxima estação
 int compara_merge_codProxEst(const void *a, const void *b) {
-    REGISTRO *r1 = a;
-    REGISTRO *r2 = b;
+    const REGISTRO *r1 = (const REGISTRO *)a; // o qsort precisa que seja const
+    const REGISTRO *r2 = (const REGISTRO *)b;
 
     // Se os registros tiverem campos nulos
     // serão considerados iguais
@@ -37,8 +37,8 @@ int compara_merge_codProxEst(const void *a, const void *b) {
 
 // Função usada pelo qsort para comparar a estação atual
 int compara_merge_codEst(const void *a,const void *b) {
-    REGISTRO *r1 = a;
-    REGISTRO *r2 = b;
+    const REGISTRO *r1 = (const REGISTRO *)a; 
+    const REGISTRO *r2 = (const REGISTRO *)b;
 
     // Mesma lógica da função anterior, mas para o codEstacao
     if (r1->codEstacao == -1 && r2->codEstacao == -1) {
@@ -114,7 +114,7 @@ void MERGE_JOIN() {
         REGISTRO reg;
         LerRegistroBin(arq1, &reg, i);
         
-        // Ignoramos lixo: só guardamos registros não removidos e com o campo válido
+        //  só será guardado registros não removidos e com o campo válido
         if (reg.removido == '0' && reg.codProxEstacao != -1) {
             vetor1[qtd1] = reg;
             qtd1++;

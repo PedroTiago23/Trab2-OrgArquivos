@@ -8,8 +8,8 @@ Pedro Tiago Biffi - 16827777
 
 // Função de comparação para o qsort, relacionada ao codigo Estação
 int compara_codEstacao(const void *a, const void *b) {
-    REGISTRO *r1 = a;
-    REGISTRO *r2 = b;
+    const REGISTRO *r1 = (const REGISTRO *)a; // o qsort precisa que seja const
+    const REGISTRO *r2 = (const REGISTRO *)b;
     
     // nulos aparecem depois dos valores não nulos
     if (r1->codEstacao == -1 && r2->codEstacao == -1) {
@@ -29,8 +29,8 @@ int compara_codEstacao(const void *a, const void *b) {
 
 // Função de comparação para o qsort, mas agora relacionada ao codigo proxima Estação
 int compara_codProxEstacao(const void *a, const void *b) {
-    REGISTRO *r1 = a;
-    REGISTRO *r2 = b;
+    const REGISTRO *r1 = (const REGISTRO *)a; 
+    const REGISTRO *r2 = (const REGISTRO *)b;
     
     // Mesma lógica da função compara_codEstacao
     if (r1->codProxEstacao == -1 && r2->codProxEstacao == -1) {
