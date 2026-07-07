@@ -26,6 +26,11 @@ void NESTED_JOIN()
         return;
     }
 
+    // Como sabemos pela especificação, ambos arquivos serão o mesmo, logo mesmo cabecalho, dispensa outra leitura.
+    CABECALHO cabecalhoArquivo;
+    lerCabecalhoBin(arq1, &cabecalhoArquivo);
+
+    
 
     return;
 }
