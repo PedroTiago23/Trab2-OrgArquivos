@@ -23,8 +23,8 @@ void MERGE_JOIN() {
     }
 
     // define e abre os arquivos no modo leitura binária 
-    FILE* arq1 = fopen(nomeArq1, "rb");
-    FILE* arq2 = fopen(nomeArq2, "rb");
+    FILE* arq1 = fopen(nomeArq1, "rb+");
+    FILE* arq2 = fopen(nomeArq2, "rb+");
 
     // Verifica se os arquivos tiveram problemas para serem abertos 
     if (arq1 == NULL || arq2 == NULL) {
@@ -59,17 +59,36 @@ void MERGE_JOIN() {
     // de registros lidos que não são logicamente removidos ou nulos
     REGISTRO *vetor1;
     int qtd1 = popularVetorRegistros(&vetor1, arq1);
-    fclose(arq1);
 
     // Mesma lógica do vetor1, mas agora para o arquivo2
     REGISTRO *vetor2;
     int qtd2 = popularVetorRegistros(&vetor2, arq2);
-    fclose(arq2);
 
     // Ordena ambos os vetores, o arquivo1 é ordenado pelo codProxEstacao
     // o arquivo2 é ordenado pelo codEstacao
     qsort(vetor1, qtd1, sizeof(REGISTRO), compara_codProxEstacao);
     qsort(vetor2, qtd2, sizeof(REGISTRO), compara_codEstacao);
+
+    // Reescrevendo o arquivo 1 ordenado no disco.
+    fseek(arq1, 17, SEEK_SET);  // Pula o cabeçalho.
+    for (int i = 0; i < qtd1; i++)
+        EscreverRegistroBin(arq1, &vetor1[i]);
+
+    cab1.status = '1';
+    cab1.topo = -1;
+    cab1.proxRRN = qtd1;
+    atualizarCabecalho(&cab1, arq1);
+
+    // Reescrevendo o arquivo 2 ordenado no disco
+    fseek(arq2, 17, SEEK_SET);
+    for (int i = 0; i < qtd2; i++)
+        EscreverRegistroBin(arq2, &vetor2[i]);
+
+    cab2.status = '1';
+    cab2.topo = -1;
+    cab2.proxRRN = qtd2;
+    atualizarCabecalho(&cab2, arq2);
+
 
     // Definindo e inicializando as variaveis que representam os ponteiros 
     // dos arquivos 1 e 2, além da flag existe_um, que verifica se 
@@ -126,6 +145,9 @@ void MERGE_JOIN() {
         liberaStringsRegistro(&vetor2[i]);
     }
     free(vetor2);
+
+    fclose(arq1);
+    fclose(arq2);
 
     return;
 }
