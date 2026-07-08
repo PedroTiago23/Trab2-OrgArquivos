@@ -1,3 +1,9 @@
+/*
+Definições das funções e funcionalidades usadas para realizar junções e ordenações de arquivos.
+Bruno Dias de Campos Filho - 16832658
+Pedro Tiago Biffi - 16827777
+*/
+
 #ifndef JOIN_HEADERS
 #define JOIN_HEADERS
 

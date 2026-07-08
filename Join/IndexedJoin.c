@@ -60,11 +60,9 @@ void INDEXED_JOIN()
             liberaStringsRegistro(&registroArq2);
             continue;
         }
-        if(registroArq1.codProxEstacao == registroArq2.codEstacao)  // Verificação necessária? Acho que não mas depois removemos.
-        {
-            printf("%d %s %s %d %s\n", registroArq1.codEstacao, registroArq1.nomeEstacao, registroArq1.nomeLinha, registroArq2.codEstacao, registroArq2.nomeEstacao);
-            existe_um = true;
-        }
+        
+        printf("%d %s %s %d %s\n", registroArq1.codEstacao, registroArq1.nomeEstacao, registroArq1.nomeLinha, registroArq2.codEstacao, registroArq2.nomeEstacao);
+        existe_um = true;
 
         liberaStringsRegistro(&registroArq1);
         liberaStringsRegistro(&registroArq2);
